@@ -12,8 +12,8 @@ const config = {
 };
 
 const connection = mysql.createPool(config);
+const closePool = promisify(connection.end).bind(connection);
 const query = promisify(connection.query).bind(connection);
-const closePool = promisify(connection.end).bind(connection)
 
 console.log('connected!');
 

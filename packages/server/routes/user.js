@@ -9,16 +9,17 @@ const errorObj = {
 }
 
 /* get user list */
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   try {
-    const query = req.query.query
+    const query = req.query.query;
     if (!query) {
-      res.status(400).send({
+      return res.status(400).send({
         code: 400,
         data: {},
         message: 'query field is required.'
       })
     };
+
     const result = await queryUsers(query);
     res.status(200).send(result);
   } catch (err) {
@@ -28,21 +29,92 @@ router.get('/', async (req, res, next) => {
 });
 
 /* create  user */
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
   try {
     const { username, password } = req.body;
-    if (!username || !password) {
-      res.status(400).send({
+    const usernameRegex = new RegExp(/^[0-9a-zA-Z_]{4,8}$/);
+    const passwordRegex = new RegExp(/^[0-9a-zA-Z_]{6,10}$/);
+    if (!username || !password || !usernameRegex.test(username) || !passwordRegex.test(password)) {
+      return res.status(400).send({
         code: 400,
         data: {},
-        message: 'username and password field is required.'
+        message: 'username and password is invalid.'
       })
     }
+
+    const userInfo = await queryUsers(username);
+    if (userInfo.length) {
+      return res.status(400).send({
+        code: 400,
+        data: {},
+        message: 'username is exist, please use another one.'
+      })
+    }
+
     const result = await createUser(username, password);
     res.status(200).send(result);
   } catch (err) {
     Object.assign(errorObj, { message: err });
     res.status(500).send(errorObj)
+  }
+})
+
+/* update username */
+router.patch('/:id', async (req, res) => {
+  try {
+    const { username } = req.body
+    const { id } = req.params
+    if (!username || !id) {
+      return res.status(400).send({
+        code: 400,
+        data: {},
+        message: 'username or id is invalid.',
+      });
+    };
+
+    const userInfo = await queryUsers(username);
+    if (userInfo.length && userInfo[0]?.id !== id) {
+      return res.status(400).send({
+        code: 400,
+        data: {},
+        message: 'username is exist, please use another one.',
+      });
+    }
+
+    const result = await updateUser(id, username);
+    res.status(200).send(result);
+  } catch (err) {
+    Object.assign(errorObj, { message: err })
+    res.status(500).send(errorObj)
+  }
+})
+
+/* delete user */
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).send({
+        code: 400,
+        data: {},
+        message: 'id is required',
+      })
+    }
+
+    const userInfo = await queryUsers(id);
+    if (!userInfo.length) {
+      return res.status(400).send({
+        code: 400,
+        data: {},
+        message: 'user not exist.',
+      });
+    }
+
+    const result = await deleteUser(id);
+    res.status(200).send(result);
+  } catch (err) {
+    Object.assign(errorObj, err);
+    res.status(500).send(errorObj);
   }
 })
 

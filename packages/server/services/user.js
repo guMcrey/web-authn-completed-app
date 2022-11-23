@@ -6,7 +6,7 @@ const queryUsers = async (query) => {
     if (query === 'all') {
         users = await userModel.selectAllUsers();
     } else {
-        users = await userModel.selectUserById(query);
+        users = await userModel.selectUserByQuery(query);
     }
     return users;
 }

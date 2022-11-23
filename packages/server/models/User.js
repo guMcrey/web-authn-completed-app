@@ -6,9 +6,9 @@ const User = {
         const user = await query(sql);
         return user;
     },
-    selectUserById: async (id) => {
-        const sql = 'SELECT * FROM user WHERE id = ?';
-        const user = await query(sql, id);
+    selectUserByQuery: async (queryString) => {
+        const sql = 'SELECT * FROM user WHERE id = ? OR username = ?';
+        const user = await query(sql, [queryString, queryString]);
         return user;
 
     },
@@ -19,7 +19,7 @@ const User = {
     },
     updateUser: async (id, username) => {
         const sql = 'UPDATE user SET `username` = ? WHERE `id` = ?';
-        const user = await query(sql, username, id);
+        const user = await query(sql, [username, id]);
         return user;
     },
     deleteUser: async (id) => {
