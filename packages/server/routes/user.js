@@ -8,10 +8,10 @@ const errorObj = {
   message: 'Server Error.'
 }
 
-/* get user list */
+// get user list
 router.get('/', async (req, res) => {
   try {
-    const query = req.query.query;
+    const { query } = req.query;
     if (!query) {
       return res.status(400).send({
         code: 400,
@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-/* create  user */
+// create user
 router.post('/', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -54,12 +54,12 @@ router.post('/', async (req, res) => {
     const result = await createUser(username, password);
     res.status(200).send(result);
   } catch (err) {
-    Object.assign(errorObj, { message: err });
+    Object.assign(errorObj, { message: err.message });
     res.status(500).send(errorObj)
   }
 })
 
-/* update username */
+// update username
 router.patch('/:id', async (req, res) => {
   try {
     const { username } = req.body
@@ -84,12 +84,12 @@ router.patch('/:id', async (req, res) => {
     const result = await updateUser(id, username);
     res.status(200).send(result);
   } catch (err) {
-    Object.assign(errorObj, { message: err })
+    Object.assign(errorObj, { message: err.message })
     res.status(500).send(errorObj)
   }
 })
 
-/* delete user */
+// delete user
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -113,7 +113,7 @@ router.delete('/:id', async (req, res) => {
     const result = await deleteUser(id);
     res.status(200).send(result);
   } catch (err) {
-    Object.assign(errorObj, err);
+    Object.assign(errorObj, { message: err.message });
     res.status(500).send(errorObj);
   }
 })

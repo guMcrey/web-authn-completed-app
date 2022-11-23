@@ -3,8 +3,8 @@ const { query } = require('../utils/database');
 const User = {
     selectAllUsers: async () => {
         const sql = 'SELECT * FROM user';
-        const user = await query(sql);
-        return user;
+        const users = await query(sql);
+        return users;
     },
     selectUserByQuery: async (queryString) => {
         const sql = 'SELECT * FROM user WHERE id = ? OR username = ?';
