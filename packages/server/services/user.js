@@ -1,12 +1,13 @@
 const userModel = require('../models/user');
 const { v4: uuidv4 } = require('uuid');
 
-const queryUsers = async (query) => {
+const queryUsers = async ({ query, id, username, password }) => {
     let users = [];
     if (query === 'all') {
         users = await userModel.selectAllUsers();
-    } else {
-        users = await userModel.selectUserByQuery(query);
+    }
+    if (query !== 'all' && (id || username || password)) {
+        users = await userModel.selectUserByQuery(id, username, password);
     }
     return users;
 }

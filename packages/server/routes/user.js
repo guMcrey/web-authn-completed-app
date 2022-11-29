@@ -11,16 +11,16 @@ const errorObj = {
 // get user list
 router.get('/', async (req, res) => {
   try {
-    const { query } = req.query;
-    if (!query) {
+    const { query, id, username, password } = req.query;
+    if (!query && !id && !username && !password) {
       return res.status(400).send({
         code: 400,
         data: {},
-        message: 'query field is required.'
+        message: 'select query field is required.'
       })
     };
 
-    const result = await queryUsers(query);
+    const result = await queryUsers({ query, id, username, password });
     res.status(200).send(result);
   } catch (err) {
     Object.assign(errorObj, { message: err });
@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
       })
     }
 
-    const userInfo = await queryUsers(username);
+    const userInfo = await queryUsers({ username });
     if (userInfo.length) {
       return res.status(400).send({
         code: 400,
@@ -72,7 +72,7 @@ router.patch('/:id', async (req, res) => {
       });
     };
 
-    const userInfo = await queryUsers(username);
+    const userInfo = await queryUsers({ username });
     if (userInfo.length && userInfo[0]?.id !== id) {
       return res.status(400).send({
         code: 400,
@@ -101,7 +101,7 @@ router.delete('/:id', async (req, res) => {
       })
     }
 
-    const userInfo = await queryUsers(id);
+    const userInfo = await queryUsers({ id });
     if (!userInfo.length) {
       return res.status(400).send({
         code: 400,

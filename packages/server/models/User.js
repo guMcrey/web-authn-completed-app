@@ -6,9 +6,29 @@ const User = {
         const users = await query(sql);
         return users;
     },
-    selectUserByQuery: async (queryString) => {
-        const sql = 'SELECT * FROM user WHERE id = ? OR username = ?';
-        const user = await query(sql, [queryString, queryString]);
+    selectUserByQuery: async (id, username, password) => {
+        // TODO: sql logic improve
+        let sql = `SELECT * FROM user WHERE`;
+        let count = 0;
+        if (id) {
+            count++;
+            sql += ` id = '${id}'`;
+        }
+        if (username) {
+            count++;
+            if (count > 1) {
+                sql += ' AND'
+            }
+            sql += ` username = '${username}'`;
+        }
+        if (password) {
+            count++;
+            if (count > 1) {
+                sql += ' AND'
+            }
+            sql += ` password = '${password}'`;
+        }
+        const user = await query(sql);
         return user;
 
     },
