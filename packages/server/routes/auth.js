@@ -70,7 +70,7 @@ router.post('/registerRequest', async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'id is required',
+                message: 'username is invalid',
             })
         }
 
@@ -95,7 +95,7 @@ router.post('/registerRequest', async (req, res) => {
             }
         }
 
-        const options = fido2.generateRegistrationOptions({
+        const options = await fido2.generateRegistrationOptions({
             rpName: RP_NAME,
             rpID: process.env.HOSTNAME,
             userID: userInfo[0].id,
@@ -167,5 +167,114 @@ router.post('/registerResponse', async (req, res) => {
         delete req.session.challenge;
     }
 })
+
+// sign in with auth request
+router.post('/signinRequest', async (req, res) => {
+    try {
+        const { username, credId } = req.query
+        const usernameRegex = new RegExp(/^[0-9a-zA-Z_]{4,8}$/);
+        if (!username || !usernameRegex.test(username)) {
+            return res.status(400).send({
+                code: 400,
+                data: {},
+                message: 'username is invalid',
+            })
+        }
+
+        const userInfo = await queryUsers({ username });
+        if (!userInfo.length) {
+            return res.status(400).send({
+                code: 400,
+                data: {},
+                message: 'user not exist',
+            })
+        }
+
+        const authInfo = await queryAuths({ username });
+        const allowCredentials = [];
+        for (const auth of authInfo) {
+            if (credId && auth.credId == credId) {
+                allowCredentials.push({
+                    id: base64url.toBuffer(auth.credId),
+                    type: 'public-key',
+                    transports: ['internal']
+                });
+            }
+        }
+
+        const options = await fido2.generateAuthenticationOptions({
+            allowCredentials,
+            attestationType: 'none',
+            authenticatorSelection: {
+                authenticatorAttachment: 'platform',
+            }
+        });
+
+        req.session.challenge = options.challenge;
+        res.status(200).send(options);
+    } catch (err) {
+        Object.assign(errorObj, { message: err.message });
+        res.status(500).send(errorObj);
+    }
+});
+
+// sign in with auth response
+router.post('/signinResponse', async (req, res) => {
+    try {
+        const { body } = req;
+        const expectedChallenge = req.session.challenge;
+        const expectedOrigin = process.env.ORIGIN;
+        const expectedRPID = process.env.HOSTNAME;
+
+        if (!body || !body.id || !expectedChallenge || !expectedOrigin || !expectedRPID) {
+            return res.status(400).send({
+                code: 400,
+                data: {},
+                message: 'body, expectedChallenge, expectedOrigin, expectedRPID are required.'
+            });
+        }
+
+        const authInfo = await queryAuths({ credId: body.id });
+        const credential = authInfo[0];
+        credential.credentialPublicKey = base64url.toBuffer(credential.publicKey);
+        credential.credentialID = base64url.toBuffer(credential.credId);
+        credential.counter = credential.prevCounter;
+
+        if (!credential) {
+            throw 'Authenticating credential not found.';
+        }
+
+        const verification = await fido2.verifyAuthenticationResponse({
+            credential: body,
+            expectedChallenge,
+            expectedOrigin,
+            expectedRPID,
+            authenticator: credential,
+        });
+        console.log('xx', verification)
+        const { verified, authenticationInfo } = verification;
+
+        if (!verified) {
+            return res.status(400).send({
+                code: 400,
+                data: {},
+                message: 'User verification failed.',
+            });
+        }
+
+        const { newCounter } = authenticationInfo;
+        const { credId } = credential;
+        credential.prevCounter = newCounter;
+        await updateAuth(credId, newCounter)
+
+        delete req.session.challenge;
+        req.session['signed-in'] = 'yes';
+        res.status(200).send({ id: body.id })
+    } catch (err) {
+        Object.assign(errorObj, { message: err.message || err });
+        res.status(500).send(errorObj);
+        delete req.session.challenge;
+    }
+});
 
 module.exports = router;

@@ -25,3 +25,24 @@ export const useLogin = () => {
 
   return {loading, fetchData}
 }
+
+// logout
+export const useLogout = () => {
+  const loading = ref(false)
+  const router = useRouter()
+
+  const logoutHandler = async () => {
+    try {
+      loading.value = true
+      await axios.get(`/logout`)
+      localStorage.removeItem('username')
+      router.replace('/')
+    } catch (e) {
+      handleError(e)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {loading, logoutHandler}
+}

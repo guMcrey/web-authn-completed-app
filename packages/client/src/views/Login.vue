@@ -10,9 +10,16 @@
       <div class="container-content">
         <div class="content-title">Sign in</div>
         <div class="content-detail">
-          <SignInWithPasskey></SignInWithPasskey>
+          <SignInWithPasskey
+            :username="username"
+            :getAuthLoading="getAuthLoading"
+            :authList="authList"
+            :authAvailable="isAuthenticatorAvailable"
+            @clickAuth="clickAuthHandler"
+          />
+          <InfoTip v-if="!isAuthenticatorAvailable" />
           <div class="or-title">or</div>
-          <LoginForm></LoginForm>
+          <LoginForm />
         </div>
       </div>
       <div class="tips-text">
@@ -24,8 +31,38 @@
 </template>
 
 <script lang="ts" setup>
+import {ref, onMounted, computed} from 'vue'
 import SignInWithPasskey from './components/SignInWithPasskey.vue'
 import LoginForm from './components/LoginForm.vue'
+import {useGetAuthByUsername} from '@/apis/useAuth'
+
+const {
+  data: authList,
+  loading: getAuthLoading,
+  fetchData: fetchAuthByUsername,
+} = useGetAuthByUsername()
+
+const isAuthenticatorAvailable = ref(false)
+
+const username = computed(() => {
+  return localStorage.getItem('username') || ''
+})
+
+const authenticatorAvailable = async () => {
+  if (window.PublicKeyCredential) {
+    isAuthenticatorAvailable.value = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+  } else {
+    isAuthenticatorAvailable.value = false
+  }
+}
+
+const clickAuthHandler = async () => {
+  await fetchAuthByUsername(username.value)
+}
+
+onMounted(() => {
+  authenticatorAvailable()
+})
 </script>
 
 <style lang="stylus" scoped>

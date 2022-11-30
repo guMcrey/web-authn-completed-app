@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="getAuthLoading" class="page-container-wrapper">
+  <div class="page-container-wrapper">
     <div class="page-container">
       <HomeHeader
         :username="username"
@@ -11,11 +11,17 @@
       />
       <PasskeyList
         v-if="isAuthenticatorAvailable"
+        v-loading="getAuthLoading"
         :username="username"
         :authList="authList"
         @change="fetchAuthByUsername(username)"
       ></PasskeyList>
-      <TryReauthAndLogout />
+      <TryReauthAndLogout
+        :username="username"
+        :getAuthLoading="getAuthLoading"
+        :authList="authList"
+        :authAvailable="isAuthenticatorAvailable"
+      />
     </div>
   </div>
 </template>
@@ -48,12 +54,13 @@ const authenticatorAvailable = async () => {
 const username = computed(() => {
   const username = localStorage.getItem('username') || ''
   if (!username) {
-    router.push('/')
+    router.replace('/')
   }
   return username
 })
 
 onMounted(async () => {
+  if (!username.value) return
   await authenticatorAvailable()
   await fetchAuthByUsername(username.value)
 })

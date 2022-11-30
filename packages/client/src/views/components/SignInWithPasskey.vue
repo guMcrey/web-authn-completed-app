@@ -3,51 +3,93 @@
     <el-button
       type="primary"
       size="large"
-      :loading="getAuthLoading"
-      :disabled="!isAuthenticatorAvailable"
+      :loading="getAuthLoading || signInRequestLoading || signInResponseLoading"
+      :disabled="!authAvailable"
       round
       @click="clickHandler"
     >
       <template #icon>
         <img class="identify-icon" src="@/assets/images/identify-icon.svg" />
       </template>
-      Sign in with passkey
+      {{ buttonText }}
     </el-button>
-    <InfoTip v-if="!isAuthenticatorAvailable" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import {ref, onMounted, computed} from 'vue'
-import {ElMessageBox} from 'element-plus'
+import {PropType} from 'vue'
+import {ElMessage, ElMessageBox} from 'element-plus'
 import 'element-plus/es/components/message-box/style/css'
-import {useGetAuthByUsername} from '@/apis/useAuth'
+import {useSignInRequest, useSignInResponse} from '@/apis/useAuth'
+import {IAuthItem} from '@/interfaces/auth'
 
-const {
-  data: authList,
-  loading: getAuthLoading,
-  fetchData: fetchAuthByUsername,
-} = useGetAuthByUsername()
-
-const isAuthenticatorAvailable = ref(false)
-
-const username = computed(() => {
-  return localStorage.getItem('username') || ''
+const props = defineProps({
+  buttonText: {
+    type: String,
+    default: 'Sign in with passkey',
+  },
+  authAvailable: {
+    type: Boolean,
+    default: false,
+  },
+  clickType: {
+    type: String,
+    default: 'login',
+  },
+  authList: {
+    type: Array as PropType<IAuthItem[]>,
+    default: () => [],
+  },
+  getAuthLoading: {
+    type: Boolean,
+    default: false,
+  },
+  username: {
+    type: String,
+    default: '',
+  },
 })
 
-const authenticatorAvailable = async () => {
-  if (window.PublicKeyCredential) {
-    isAuthenticatorAvailable.value = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
-  } else {
-    isAuthenticatorAvailable.value = false
-  }
-}
+const {
+  data: signInRequestData,
+  loading: signInRequestLoading,
+  confirmHandler: signInRequestHandler,
+} = useSignInRequest()
+
+const {
+  loading: signInResponseLoading,
+  confirmHandler: signInResponseHandler,
+} = useSignInResponse()
 
 const findPasskeyHandler = async (username: string) => {
-  await fetchAuthByUsername(username)
-  if (!authList.value.length) {
+  if (!props.authList?.length) {
+    if (props.clickType === 'login') {
+      ElMessageBox.alert(
+        "You don't have a passkey yet. Please use username & password to sign in.",
+        'No passkey',
+        {
+          type: 'info',
+          confirmButtonText: 'OK',
+        }
+      )
+    }
+    if (props.clickType === 're-auth') {
+      ElMessage.warning('Please add a passkey first.')
+    }
+    return
+  }
+
+  signInHandler(username)
+}
+
+const signInHandler = async (username: string) => {
+  await signInRequestHandler(username)
+  const credId = localStorage.getItem(`credId`)
+  const challenge = localStorage.getItem('challenge')
+  if (!signInRequestData || !challenge) return
+  if (!credId) {
     ElMessageBox.alert(
-      "You don't have a passkey yet. Please use username & password to sign in.",
+      'Passkey is unavailable because data may not exist due to clearing cache.',
       'No passkey',
       {
         type: 'info',
@@ -56,10 +98,14 @@ const findPasskeyHandler = async (username: string) => {
     )
     return
   }
+  await signInResponseHandler(signInRequestData, username)
+  if (props.clickType === 're-auth') {
+    ElMessage.success('Authentication successful.')
+  }
 }
 
 const clickHandler = () => {
-  if (!username.value) {
+  if (!props.username) {
     ElMessageBox.prompt(
       'Username supports letters, numbers and underscores.',
       'Username',
@@ -80,18 +126,13 @@ const clickHandler = () => {
       })
     return
   }
-  findPasskeyHandler(username.value)
+  findPasskeyHandler(props.username)
 }
-
-onMounted(() => {
-  authenticatorAvailable()
-})
 </script>
 
 <style lang="stylus" scoped>
 .sign-in-button
   width 100%
-  margin-top 30px
   .el-button
     width 100%
 .identify-icon

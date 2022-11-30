@@ -48,5 +48,17 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.get('/logout', async (req, res) => {
+    try {
+        delete req.session.username;
+        delete req.session.challenge;
+        req.session['signed-in'] = 'no';
+        res.status(200).send('logout success');
+    } catch (err) {
+        Object.assign(errorObj, { message: err });
+        res.status(500).send(errorObj)
+    }
+})
+
 
 module.exports = router;
