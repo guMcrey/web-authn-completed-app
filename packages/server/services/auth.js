@@ -1,20 +1,18 @@
 const authModel = require('../models/Auth');
-const { v4: uuidv4 } = require('uuid');
 const deviceInfo = require('../utils/device');
 
-const queryAuths = async (query, username, deviceName) => {
+const queryAuths = async ({ query, credId, username, deviceName }) => {
     let authList = [];
     if (query === 'all') {
         authList = await authModel.selectAllAuth();
     }
-    if (query !== 'all' || username || deviceName) {
-        authList = await authModel.selectAuthByQuery(username, deviceName);
+    if (query !== 'all' && (credId || username || deviceName)) {
+        authList = await authModel.selectAuthByQuery(credId, username, deviceName);
     }
     return authList;
 }
 
-const createAuth = async (username, publicKey, prevCounter, userAgent) => {
-    const credId = uuidv4();
+const createAuth = async ({ credId, username, publicKey, prevCounter, userAgent }) => {
     const deviceName = deviceInfo(userAgent)?.browser?.name;
     const auth = await authModel.insertAuth(credId, username, publicKey, prevCounter, deviceName);
     return auth;

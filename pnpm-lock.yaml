@@ -8,6 +8,7 @@ importers:
   packages/client:
     specifiers:
       '@element-plus/icons-vue': ^2.0.10
+      '@simplewebauthn/browser': ^6.2.2
       '@types/node': ^18.11.9
       '@vitejs/plugin-vue': ^3.2.0
       axios: ^1.2.0
@@ -22,6 +23,7 @@ importers:
       vue-tsc: ^1.0.9
     dependencies:
       '@element-plus/icons-vue': 2.0.10_vue@3.2.45
+      '@simplewebauthn/browser': 6.2.2
       axios: 1.2.0
       element-plus: 2.2.22_vue@3.2.45
       vue: 3.2.45
@@ -198,6 +200,10 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
+
+  /@simplewebauthn/browser/6.2.2:
+    resolution: {integrity: sha512-VUtne7+s6BmW4usnbitjZEI1VNT/PNh6bYg+AI4OMdfpo5z+yAq+6iVAWBJlIUGVk5InetEQvTUp6OefBam8qg==}
+    dev: false
 
   /@simplewebauthn/server/6.2.2:
     resolution: {integrity: sha512-c7vM8rocz9N5ndaWpu9nOmKQVF7PXd4/R620klVAAoP7UQJwOpGJKSmIOdmg87lNMMk5/V38Mp/5g6kYz34+0g==}

@@ -7,8 +7,28 @@ const Auth = {
         return credentials;
     },
     selectAuthByQuery: async (credId, username, deviceName) => {
-        const sql = 'SELECT * FROM credential WHERE credId = ? AND username = ? AND deviceName = ?';
-        const credentials = await query(sql, [credId, username, deviceName]);
+        // TODO: sql logic improve
+        let sql = `SELECT * FROM credential WHERE`;
+        let count = 0;
+        if (credId) {
+            count++;
+            sql += ` credId = '${credId}'`;
+        }
+        if (username) {
+            count++;
+            if (count > 1) {
+                sql += ' AND'
+            }
+            sql += ` username = '${username}'`;
+        }
+        if (deviceName) {
+            count++;
+            if (count > 1) {
+                sql += ' AND'
+            }
+            sql += ` deviceName = '${deviceName}'`;
+        }
+        const credentials = await query(sql);
         return credentials;
     },
     insertAuth: async (credId, username, publicKey, prevCounter, deviceName) => {

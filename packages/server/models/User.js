@@ -30,7 +30,6 @@ const User = {
         }
         const user = await query(sql);
         return user;
-
     },
     insertUser: async (id, username, password) => {
         const sql = 'INSERT INTO user SET ?';
