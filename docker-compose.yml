@@ -1,0 +1,18 @@
+version: "2.12"
+
+services:
+  client:
+    build: ./packages/client
+    ports:
+      - 5173:80
+  server:
+    build: ./packages/server
+    ports:
+      - 3001:3001
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - ./database:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: Password123#@!
+      MYSQL_DATABASE: web_authn_demo

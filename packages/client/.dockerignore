@@ -7,12 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-database
-.history
 node_modules
 dist
 dist-ssr
 *.local
+.history
 
 # Editor directories and files
 .vscode/*

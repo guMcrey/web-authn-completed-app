@@ -3,7 +3,7 @@ const { promisify } = require('util');
 
 // mysql -h127.0.0.1 -uroot -pPassword123#@!
 const config = {
-    host: 'localhost',
+    host: 'mysql',
     user: 'root',
     password: 'Password123#@!',
     database: 'web_authn_demo',
