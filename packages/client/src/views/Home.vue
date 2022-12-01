@@ -53,7 +53,8 @@ const authenticatorAvailable = async () => {
 
 const username = computed(() => {
   const username = localStorage.getItem('username') || ''
-  if (!username) {
+  const isLogin = localStorage.getItem('sign-in') || ''
+  if (!username || isLogin !== 'yes') {
     router.replace('/')
   }
   return username

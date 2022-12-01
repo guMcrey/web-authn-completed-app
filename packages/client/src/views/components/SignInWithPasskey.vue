@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import {PropType} from 'vue'
+import {ref, watch, PropType} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import 'element-plus/es/components/message-box/style/css'
 import {useSignInRequest, useSignInResponse} from '@/apis/useAuth'
@@ -50,6 +50,9 @@ const props = defineProps({
   },
 })
 
+const emits = defineEmits(['clickAuth'])
+const currentUsername = ref('')
+
 const {
   data: signInRequestData,
   loading: signInRequestLoading,
@@ -61,25 +64,20 @@ const {
   confirmHandler: signInResponseHandler,
 } = useSignInResponse()
 
-const findPasskeyHandler = async (username: string) => {
-  if (!props.authList?.length) {
-    if (props.clickType === 'login') {
-      ElMessageBox.alert(
-        "You don't have a passkey yet. Please use username & password to sign in.",
-        'No passkey',
-        {
-          type: 'info',
-          confirmButtonText: 'OK',
-        }
-      )
-    }
-    if (props.clickType === 're-auth') {
-      ElMessage.warning('Please add a passkey first.')
-    }
-    return
+const findPasskeyHandler = async () => {
+  if (props.clickType === 'login') {
+    return ElMessageBox.alert(
+      "You don't have a passkey yet. Please use username & password to sign in.",
+      'No passkey',
+      {
+        type: 'info',
+        confirmButtonText: 'OK',
+      }
+    )
   }
-
-  signInHandler(username)
+  if (props.clickType === 're-auth') {
+    return ElMessage.warning('Please add a passkey first.')
+  }
 }
 
 const signInHandler = async (username: string) => {
@@ -119,15 +117,28 @@ const clickHandler = () => {
       }
     )
       .then(async ({value}) => {
-        findPasskeyHandler(value)
+        emits('clickAuth', props.username || value)
+        currentUsername.value = value
       })
       .catch((e) => {
         console.error(e)
       })
     return
   }
-  findPasskeyHandler(props.username)
+  currentUsername.value = props.username
+  emits('clickAuth', props.username)
 }
+
+watch(
+  () => props.authList,
+  async () => {
+    if (props.authList.length) {
+      await signInHandler(currentUsername.value)
+    } else {
+      await findPasskeyHandler()
+    }
+  }
+)
 </script>
 
 <style lang="stylus" scoped>

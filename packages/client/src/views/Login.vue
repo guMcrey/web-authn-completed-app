@@ -56,8 +56,8 @@ const authenticatorAvailable = async () => {
   }
 }
 
-const clickAuthHandler = async () => {
-  await fetchAuthByUsername(username.value)
+const clickAuthHandler = async (name: string) => {
+  await fetchAuthByUsername(name || username.value)
 }
 
 onMounted(() => {

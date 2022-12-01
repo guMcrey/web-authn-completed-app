@@ -16,6 +16,7 @@ export const useLogin = () => {
       ElMessage.success('Login successful.')
       router.push('/home')
       localStorage.setItem('username', username)
+      localStorage.setItem('sign-in', 'yes')
     } catch (e) {
       handleError(e)
     } finally {
@@ -35,7 +36,7 @@ export const useLogout = () => {
     try {
       loading.value = true
       await axios.get(`/logout`)
-      localStorage.removeItem('username')
+      localStorage.removeItem('sign-in')
       router.replace('/')
     } catch (e) {
       handleError(e)

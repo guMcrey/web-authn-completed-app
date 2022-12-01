@@ -1,4 +1,4 @@
-const userModel = require('../models/user');
+const userModel = require('../models/User');
 const { v4: uuidv4 } = require('uuid');
 
 const queryUsers = async ({ query, id, username, password }) => {
