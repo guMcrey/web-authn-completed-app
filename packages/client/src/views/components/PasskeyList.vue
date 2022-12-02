@@ -79,6 +79,7 @@ const addAuthHandler = async () => {
   await registerRequestHandler(props.username)
   if (!registerRequestData.id) return
   await registerResponseHandler(props.username, registerRequestData)
+  resetHandler()
   emits('change')
 }
 
@@ -96,6 +97,21 @@ const deleteAuthHandler = (credId: string) => {
     emits('change')
   })
 }
+
+const resetHandler = () => {
+  Object.assign(registerRequestData, {
+    id: '',
+    rawId: '',
+    authenticatorAttachment: 'platform',
+    clientExtensionResults: {},
+    response: {
+      attestationObject: '',
+      clientDataJSON: '',
+    },
+    transports: 'internal',
+    type: 'public-key',
+  })
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -109,10 +125,12 @@ const deleteAuthHandler = (credId: string) => {
   display flex
   align-items center
   justify-content space-between
+  gap 20px
   border-bottom 1px solid #f1f1f1
 .item-detail
-  width 90%
   overflow hidden
+  flex 1
+  width 0
 .item-public-key-device
   font-size 15px
   font-weight bold

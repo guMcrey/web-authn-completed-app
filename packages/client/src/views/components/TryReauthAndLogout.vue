@@ -1,12 +1,15 @@
 <template>
   <div class="options-list">
     <SignInWithPasskey
-      clickType="re-auth"
+      :clickType="clickType"
       :username="username"
       :buttonText="'Try Reauth'"
       :authAvailable="authAvailable"
       :authList="authList"
       :getAuthLoading="getAuthLoading"
+      @click="clickTryAuthHandler"
+      @clear="clickType = ''"
+      @authSuccess="authSuccessCallback"
     />
     <el-button
       type="warning"
@@ -15,7 +18,7 @@
       :icon="Unlock"
       size="large"
       :loading="loading"
-      @click="clickHandler"
+      @click="clickLogoutHandler"
     >
       Logout
     </el-button>
@@ -23,14 +26,14 @@
 </template>
 
 <script lang="ts" setup>
-import {PropType} from 'vue'
+import {ref, PropType} from 'vue'
 import {Unlock} from '@element-plus/icons-vue'
 import SignInWithPasskey from './SignInWithPasskey.vue'
 import {IAuthItem} from '@/interfaces/auth'
-import {ElMessageBox} from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 import {useLogout} from '@/apis/useLogin'
 
-defineProps({
+const props = defineProps({
   getAuthLoading: {
     type: Boolean,
     default: false,
@@ -50,8 +53,9 @@ defineProps({
 })
 
 const {loading, logoutHandler} = useLogout()
+const clickType = ref('')
 
-const clickHandler = () => {
+const clickLogoutHandler = () => {
   ElMessageBox.confirm('Confirm to logout?', 'Tips', {
     confirmButtonText: 'Confirm',
     cancelButtonText: 'Cancel',
@@ -59,6 +63,17 @@ const clickHandler = () => {
   }).then(async () => {
     await logoutHandler()
   })
+}
+
+const clickTryAuthHandler = () => {
+  if (!props.authList?.length) {
+    return ElMessage.warning('Please add a passkey first.')
+  }
+  clickType.value = 're-auth'
+}
+
+const authSuccessCallback = () => {
+  ElMessage.success('Authentication successful.')
 }
 </script>
 

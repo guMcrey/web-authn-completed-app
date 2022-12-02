@@ -6,7 +6,6 @@
       :loading="getAuthLoading || signInRequestLoading || signInResponseLoading"
       :disabled="!authAvailable"
       round
-      @click="clickHandler"
     >
       <template #icon>
         <img class="identify-icon" src="@/assets/images/identify-icon.svg" />
@@ -17,8 +16,8 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, watch, PropType} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
+import {watch, PropType} from 'vue'
+import {ElMessageBox} from 'element-plus'
 import 'element-plus/es/components/message-box/style/css'
 import {useSignInRequest, useSignInResponse} from '@/apis/useAuth'
 import {IAuthItem} from '@/interfaces/auth'
@@ -34,7 +33,7 @@ const props = defineProps({
   },
   clickType: {
     type: String,
-    default: 'login',
+    default: '',
   },
   authList: {
     type: Array as PropType<IAuthItem[]>,
@@ -50,8 +49,7 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(['clickAuth'])
-const currentUsername = ref('')
+const emits = defineEmits(['clear', 'authSuccess'])
 
 const {
   data: signInRequestData,
@@ -64,24 +62,8 @@ const {
   confirmHandler: signInResponseHandler,
 } = useSignInResponse()
 
-const findPasskeyHandler = async () => {
-  if (props.clickType === 'login') {
-    return ElMessageBox.alert(
-      "You don't have a passkey yet. Please use username & password to sign in.",
-      'No passkey',
-      {
-        type: 'info',
-        confirmButtonText: 'OK',
-      }
-    )
-  }
-  if (props.clickType === 're-auth') {
-    return ElMessage.warning('Please add a passkey first.')
-  }
-}
-
-const signInHandler = async (username: string) => {
-  await signInRequestHandler(username)
+const signInHandler = async () => {
+  await signInRequestHandler(props.username)
   const credId = localStorage.getItem(`credId`)
   const challenge = localStorage.getItem('challenge')
   if (!signInRequestData || !challenge) return
@@ -96,46 +78,16 @@ const signInHandler = async (username: string) => {
     )
     return
   }
-  await signInResponseHandler(signInRequestData, username)
-  if (props.clickType === 're-auth') {
-    ElMessage.success('Authentication successful.')
-  }
-}
-
-const clickHandler = () => {
-  if (!props.username) {
-    ElMessageBox.prompt(
-      'Username supports letters, numbers and underscores.',
-      'Username',
-      {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        inputPlaceholder: 'Enter your username',
-        inputPattern: /^[0-9a-zA-Z_]{4,8}$/,
-        inputErrorMessage:
-          'Please enter a 4-8 characters consisting of letter, number and underscore.',
-      }
-    )
-      .then(async ({value}) => {
-        emits('clickAuth', props.username || value)
-        currentUsername.value = value
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-    return
-  }
-  currentUsername.value = props.username
-  emits('clickAuth', props.username)
+  await signInResponseHandler(signInRequestData, props.username)
+  emits('authSuccess')
 }
 
 watch(
-  () => props.authList,
-  async () => {
-    if (props.authList.length) {
-      await signInHandler(currentUsername.value)
-    } else {
-      await findPasskeyHandler()
+  () => props.clickType,
+  () => {
+    if (props.clickType) {
+      signInHandler()
+      emits('clear')
     }
   }
 )

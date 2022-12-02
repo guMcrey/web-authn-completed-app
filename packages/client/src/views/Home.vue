@@ -69,6 +69,7 @@ onMounted(async () => {
 
 <style lang="stylus" scoped>
 .page-container-wrapper
+  position relative
   min-height 100vh
   display flex
   justify-content center
@@ -76,4 +77,9 @@ onMounted(async () => {
 .page-container
   width 700px
   padding 50px 27px 30px
+
+@media screen and (max-width 1024px)
+  .page-container
+    width 100%
+    padding 30px 22px
 </style>

@@ -15,7 +15,9 @@
             :getAuthLoading="getAuthLoading"
             :authList="authList"
             :authAvailable="isAuthenticatorAvailable"
-            @clickAuth="clickAuthHandler"
+            :clickType="clickType"
+            @click="clickSignInWithPasskeyHandler"
+            @clear="clickType = ''"
           />
           <InfoTip v-if="!isAuthenticatorAvailable" />
           <div class="or-title">or</div>
@@ -35,6 +37,8 @@ import {ref, onMounted, computed} from 'vue'
 import SignInWithPasskey from './components/SignInWithPasskey.vue'
 import LoginForm from './components/LoginForm.vue'
 import {useGetAuthByUsername} from '@/apis/useAuth'
+import {ElMessageBox} from 'element-plus'
+import 'element-plus/es/components/message-box/style/css'
 
 const {
   data: authList,
@@ -43,6 +47,7 @@ const {
 } = useGetAuthByUsername()
 
 const isAuthenticatorAvailable = ref(false)
+const clickType = ref('')
 
 const username = computed(() => {
   return localStorage.getItem('username') || ''
@@ -56,8 +61,47 @@ const authenticatorAvailable = async () => {
   }
 }
 
-const clickAuthHandler = async (name: string) => {
-  await fetchAuthByUsername(name || username.value)
+const clickSignInWithPasskeyHandler = async () => {
+  if (!username.value) {
+    ElMessageBox.prompt(
+      'Username supports letters, numbers and underscores.',
+      'Username',
+      {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        inputPlaceholder: 'Enter your username',
+        inputPattern: /^[0-9a-zA-Z_]{4,8}$/,
+        inputErrorMessage:
+          'Please enter a 4-8 characters consisting of letter, number and underscore.',
+      }
+    )
+      .then(async ({value}) => {
+        await findAuthAndSignIn(value)
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+    return
+  }
+
+  await findAuthAndSignIn(username.value)
+}
+
+const findAuthAndSignIn = async (username: string) => {
+  await fetchAuthByUsername(username)
+  if (!authList.value.length) {
+    ElMessageBox.alert(
+      "You don't have a passkey yet. Please use username & password to sign in.",
+      'No passkey',
+      {
+        type: 'info',
+        confirmButtonText: 'OK',
+      }
+    )
+    return
+  }
+
+  clickType.value = 'login'
 }
 
 onMounted(() => {
@@ -67,7 +111,8 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 .page-container-wrapper
-  min-height calc(100vh - 30px)
+  position relative
+  min-height 100vh
   display flex
   align-items center
   justify-content center
@@ -114,8 +159,9 @@ onMounted(() => {
 @media screen and (max-width 1024px)
   .page-container
     padding-top 10px
+    width 100%
   .tips-text
-    margin-top 10px
+    margin-top 30px
     font-size 13px
     font-weight 400
     position relative
