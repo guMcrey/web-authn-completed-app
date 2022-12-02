@@ -23,6 +23,7 @@
         placeholder="Enter your password"
         :prefix-icon="Lock"
         show-password
+        @keyup.enter.native="signInHandler"
       ></el-input>
     </el-form-item>
     <div class="sign-in-button">

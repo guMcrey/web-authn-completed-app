@@ -62,6 +62,7 @@ const authenticatorAvailable = async () => {
 }
 
 const clickSignInWithPasskeyHandler = async () => {
+  if (!isAuthenticatorAvailable.value) return
   if (!username.value) {
     ElMessageBox.prompt(
       'Username supports letters, numbers and underscores.',

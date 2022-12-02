@@ -66,6 +66,7 @@ const clickLogoutHandler = () => {
 }
 
 const clickTryAuthHandler = () => {
+  if (!props.authAvailable) return
   if (!props.authList?.length) {
     return ElMessage.warning('Please add a passkey first.')
   }
