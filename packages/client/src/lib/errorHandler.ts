@@ -25,9 +25,11 @@ export function handleError(error: any) {
   if (isAxiosError(error)) {
     if (error.response) {
       const response = error.response as AxiosResponse<any>
+      if (response.data.code === 401) {
+        return (location.href = location.origin)
+      }
       errorTipFunction(
         `${
-          response.data.msg ||
           response.data.message ||
           response.statusText ||
           response.data ||
@@ -40,10 +42,6 @@ export function handleError(error: any) {
       errorTipFunction(`Network error: retry after checking network status`)
     }
   } else if (isCustomError(error)) {
-    if (error.code === 400001) {
-      error.data && (window.location.href = error.data)
-      return
-    }
     errorTipFunction(`${error.message || error.msg}`)
   } else {
     errorTipFunction(`Frontend logic exception: ${(error as any).message}: `)

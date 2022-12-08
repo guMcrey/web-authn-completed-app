@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { sessionCheck } = require('../utils/safetyCheck')
 const { queryUsers, createUser } = require('../services/user');
 
 const errorObj = {
@@ -48,11 +49,9 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/logout', async (req, res) => {
+router.get('/logout', sessionCheck, async (req, res) => {
     try {
-        delete req.session.username;
-        delete req.session.challenge;
-        req.session['signed-in'] = 'no';
+        req.session.destroy();
         res.status(200).send('logout success');
     } catch (err) {
         Object.assign(errorObj, { message: err });

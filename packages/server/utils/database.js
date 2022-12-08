@@ -1,12 +1,12 @@
 const mysql = require('mysql');
+const path = require('path');
 const { promisify } = require('util');
+require('dotenv').config({ path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`) });
 
-// mysql -h127.0.0.1 -uroot -pPassword123#@!
 const config = {
-    host: 'mysql',   // docker
-    // host: 'localhost',  // dev
-    user: 'root',
-    password: 'Password123#@!',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     database: 'web_authn_demo',
     charset: 'utf8mb4',
     connectionLimit: 10,

@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "NODE_ENV=production node ./bin/www",
+    "start:dev": "NODE_ENV=development node ./bin/www",
     "tsc": "tsc"
   },
   "dependencies": {
@@ -11,8 +12,10 @@
     "base64url": "^3.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "express-session": "^1.17.3",
+    "memorystore": "^1.6.7",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
     "ua-parser-js": "^1.0.32",

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const base64url = require('base64url');
 const fido2 = require('@simplewebauthn/server');
+const { sessionCheck } = require('../utils/safetyCheck')
 const { queryUsers } = require('../services/user');
 const { queryAuths, createAuth, updateAuth, deleteAuth, } = require('../services/auth');
 
@@ -32,7 +33,7 @@ router.get('/', async (req, res) => {
 });
 
 // delete auth by id
-router.delete('/:credId', async (req, res) => {
+router.delete('/:credId', sessionCheck, async (req, res) => {
     try {
         const { credId } = req.params;
         if (!credId) {
@@ -61,7 +62,7 @@ router.delete('/:credId', async (req, res) => {
 })
 
 // register auth request
-router.post('/registerRequest', async (req, res) => {
+router.post('/registerRequest', sessionCheck, async (req, res) => {
     try {
         const RP_NAME = 'Web Authn Completed App';
         const { username } = req.body;
@@ -116,7 +117,7 @@ router.post('/registerRequest', async (req, res) => {
 })
 
 // register auth response
-router.post('/registerResponse', async (req, res) => {
+router.post('/registerResponse', sessionCheck, async (req, res) => {
     try {
         const { username } = req.query;
         const { body } = req;
@@ -251,7 +252,7 @@ router.post('/signinResponse', async (req, res) => {
             expectedRPID,
             authenticator: credential,
         });
-        console.log('xx', verification)
+
         const { verified, authenticationInfo } = verification;
 
         if (!verified) {

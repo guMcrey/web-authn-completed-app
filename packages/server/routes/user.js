@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { sessionCheck } = require('../utils/safetyCheck')
 const { queryUsers, createUser, updateUser, deleteUser } = require('../services/user');
 
 const errorObj = {
@@ -60,7 +61,7 @@ router.post('/', async (req, res) => {
 })
 
 // update username
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', sessionCheck, async (req, res) => {
   try {
     const { username } = req.body
     const { id } = req.params
@@ -90,7 +91,7 @@ router.patch('/:id', async (req, res) => {
 })
 
 // delete user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', sessionCheck, async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {
