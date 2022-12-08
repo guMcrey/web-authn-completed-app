@@ -270,7 +270,7 @@ router.post('/signinResponse', async (req, res) => {
 
         delete req.session.challenge;
         req.session['signed-in'] = 'yes';
-        res.status(200).send({ id: body.id })
+        res.status(200).send({ id: body.id });
     } catch (err) {
         Object.assign(errorObj, { message: err.message || err });
         res.status(500).send(errorObj);

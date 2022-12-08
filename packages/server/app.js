@@ -3,8 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
-const MemoryStore = require('memorystore')(session)
-const { sessionCheck } = require('./utils/safetyCheck')
+const MemoryStore = require('memorystore')(session);
 
 const usersRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
@@ -24,21 +23,17 @@ const sessionConfig = {
     resave: false,
     saveUninitialized: false,
     proxy: true,
-}
-if (process.env.NODE_ENV === 'production') {
-    Object.assign(sessionConfig, {
-        cookie: {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            maxAge: 86400000,
-        },
-        store: new MemoryStore({ checkPeriod: 86400000 })
-    })
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' ? true : false,
+        sameSite: 'lax',
+        maxAge: 86400000,
+    },
+    store: new MemoryStore({ checkPeriod: 86400000 }),
 }
 app.use(session(sessionConfig));
 
-app.use(sessionCheck, (req, res, next) => {
+app.use((req, res, next) => {
     process.env.HOSTNAME = req.headers.host;
     const protocol = /^localhost/.test(process.env.HOSTNAME) ? 'http' : 'https';
     process.env.ORIGIN = req.headers.origin || `${protocol}://${process.env.HOSTNAME}`;

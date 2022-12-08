@@ -144,7 +144,6 @@ export const useSignInRequest = () => {
       Object.assign(data, signInRequestData)
       localStorage.setItem('username', username)
       localStorage.setItem(`challenge`, options.challenge)
-      localStorage.setItem('sign-in', 'yes')
     } catch (e) {
       handleError(e)
     } finally {

@@ -4,6 +4,25 @@ import {axios} from '@/lib/axios'
 import {handleError} from '@/lib/errorHandler'
 import {useRouter} from 'vue-router'
 
+// login user: check session
+export const useLoginUser = () => {
+  const loading = ref(false)
+  const router = useRouter()
+
+  const fetchData = async () => {
+    try {
+      loading.value = true
+      await axios.get(`/is-login`)
+    } catch (err) {
+      router.push('/')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {loading, fetchData}
+}
+
 // sign in with username, password
 export const useLogin = () => {
   const loading = ref(false)
@@ -16,7 +35,6 @@ export const useLogin = () => {
       ElMessage.success('Login successful.')
       router.push('/home')
       localStorage.setItem('username', username)
-      localStorage.setItem('sign-in', 'yes')
     } catch (e) {
       handleError(e)
     } finally {
@@ -36,7 +54,6 @@ export const useLogout = () => {
     try {
       loading.value = true
       await axios.get(`/logout`)
-      localStorage.removeItem('sign-in')
       router.replace('/')
     } catch (e) {
       handleError(e)
