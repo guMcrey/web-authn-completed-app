@@ -1,0 +1,43 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.global-loading {
+    background-color: #FCFCFC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    animation: showLoading 5s;
+}
+
+.global-loading img {
+    max-width: 60vh;
+    max-height: auto;
+}
+
+@keyframes showLoading {
+    0%,
+    30% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0.3;
+    }
+
+    60% {
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
