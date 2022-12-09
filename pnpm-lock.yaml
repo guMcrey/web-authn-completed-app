@@ -50,6 +50,7 @@ importers:
       memorystore: ^1.6.7
       morgan: ~1.9.1
       mysql: ^2.18.1
+      sqlstring: ^2.3.3
       ua-parser-js: ^1.0.32
       uuid: ^9.0.0
     dependencies:
@@ -63,6 +64,7 @@ importers:
       memorystore: 1.6.7
       morgan: 1.9.1
       mysql: 2.18.1
+      sqlstring: 2.3.3
       ua-parser-js: 1.0.32
       uuid: 9.0.0
 
@@ -1676,6 +1678,11 @@ packages:
 
   /sqlstring/2.3.1:
     resolution: {integrity: sha512-ooAzh/7dxIG5+uDik1z/Rd1vli0+38izZhGzSa34FwR7IbelPWCCKSNIl8jlL/F7ERvy8CB2jNeM1E9i9mXMAQ==}
+    engines: {node: '>= 0.6'}
+    dev: false
+
+  /sqlstring/2.3.3:
+    resolution: {integrity: sha512-qC9iz2FlN7DQl3+wjwn3802RTyjCx7sDvfQEXchwa6CWOx07/WVfh91gBmQ9fahw8snwGEWU3xGzOt4tFyHLxg==}
     engines: {node: '>= 0.6'}
     dev: false
 

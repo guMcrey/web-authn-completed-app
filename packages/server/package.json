@@ -18,6 +18,7 @@
     "memorystore": "^1.6.7",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
+    "sqlstring": "^2.3.3",
     "ua-parser-js": "^1.0.32",
     "uuid": "^9.0.0"
   }

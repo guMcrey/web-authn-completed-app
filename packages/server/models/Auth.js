@@ -1,13 +1,13 @@
 const { query } = require('../utils/database');
+const SqlString = require('sqlstring');
 
 const Auth = {
     selectAllAuth: async () => {
-        const sql = 'SELECT * FROM credential';
+        const sql = SqlString.format('SELECT * FROM credential');
         const credentials = await query(sql);
         return credentials;
     },
     selectAuthByQuery: async (credId, username, deviceName) => {
-        // TODO: sql logic improve
         let sql = `SELECT * FROM credential WHERE`;
         let count = 0;
         if (credId) {
@@ -28,22 +28,22 @@ const Auth = {
             }
             sql += ` deviceName = '${deviceName}'`;
         }
-        const credentials = await query(sql);
+        const credentials = await query(SqlString.format(sql));
         return credentials;
     },
     insertAuth: async (credId, username, publicKey, prevCounter, deviceName) => {
         const sql = 'INSERT INTO credential SET ?';
-        const credential = await query(sql, { credId, username, publicKey, prevCounter, deviceName });
+        const credential = await query(SqlString.format(sql), { credId, username, publicKey, prevCounter, deviceName });
         return credential;
     },
     updateAuth: async (credId, prevCounter) => {
         const sql = 'UPDATE credential SET prevCounter = ? WHERE credId = ?';
-        const credential = await query(sql, [prevCounter, credId]);
+        const credential = await query(SqlString.format(sql), [prevCounter, credId]);
         return credential;
     },
     deleteAuth: async (credId) => {
         const sql = 'DELETE FROM credential WHERE credId = ?';
-        const credential = await query(sql, credId);
+        const credential = await query(SqlString.format(sql), credId);
         return credential;
     }
 }
