@@ -1,42 +1,41 @@
 # web-authn-completed-app
 
-- [简介](#简介)
-- [预览](#预览)
-- [安装](#安装)
-- [运行](#运行)
-- [常见问题](#常见问题)
-- [许可证](#许可证)
+English | [简体中文](./README.zh-CN.md)
 
-## 简介
+> web-authn-completed-app is a complete application based on [SimpleWebAuthn](https://simplewebauthn.dev/docs/). It allows websites to authenticate users using built-in authenticators such as Apple TouchID and Windows Hello or mobile device biometric; it can replace conventional verification methods such as passwords or SMS verification codes, and provide users with a more secure and easy login experience.
 
-此 monorepo 项目包含 client (客户端) 和 server (服务端) 两部分的代码实现
-- client
-- server
+## About
 
-*有关 client 和 server 端的详细信息, 请查看对应模块的 README*
+This monorepo project contains code of client and server
+- [client](./packages/client/README.md)
+- [server](./packages/server/README.md)
 
-## 预览
+*For more information about client and server, please check the README of the module*
 
-点击链接在线预览: [web-authn-completed-app](https://1bb8-240e-305-1b82-ae4d-703b-ca1e-d729-14c5.jp.ngrok.io)
+## Overview
 
-## 安装
+💻 overview online demo: [web-authn-completed-app](https://1bb8-240e-305-1b82-ae4d-703b-ca1e-d729-14c5.jp.ngrok.io)
 
-克隆代码后安装依赖项
+## Install
+
+Install dependencies after cloning the code
 ```
 git clone git@github.com:guMcrey/web-authn-completed-app.git
 npm install pnpm -g
 pnpm install
 ```
 
-## 运行
+## Development
 
-**方式1：Client、Server、MySQL 都使用 Docker 镜像**（推荐）
+> ⚠ In order to ensure that the full functionality can be used normally, it is recommended to use ngrok proxy to experience under HTTPS
 
-本地环境准备:
+**1. Client, Server, and MySQL all use Docker images**
+
+Local environment preparation:
 - Docker
 
 ```
-docker-compose up --build
+docker-compose up --build -d
 docker container ls
 docker exec -ti <mysql-container-id> /bin/bash
 mysql -h127.0.0.1 -uroot -pPassword123#@!
@@ -45,25 +44,25 @@ show databases;
 use web_authn_demo;
 ```
 
-创建数据库表：
+Create a database table:
 ```
-# 将 packages/server/sql/init.sql 内容粘贴到 mysql 容器命令行中
+# Paste the content of packages/server/sql/init.sql into the command line of the mysql container
 show tables;
 ```
 
-使用浏览器：http://localhost:5173
+Browser access：http://localhost:5173
 
 ---
 
-**方式2：Client、Server 本地运行，MySQL 使用 Docker 镜像**
+**2：Client and Server run locally, MySQL uses Docker image**
 
-本地环境准备:
+Local environment preparation:
 - Node 16+
 - NPM 8+
 - Docker
 
 ```
-docker-compose -f docker-compose-dev.yml up --build
+docker-compose -f docker-compose-dev.yml up --build -d
 docker container ls
 docker exec -ti <mysql-container-id> /bin/bash
 mysql -h127.0.0.1 -uroot -pPassword123#@!
@@ -72,22 +71,13 @@ show databases;
 use web_authn_demo;
 ```
 
-创建数据库表：
+Create a database table:
 ```
-# 将 packages/server/sql/init.sql 内容粘贴到 mysql 容器命令行中
+# Paste the content of packages/server/sql/init.sql into the command line of the mysql container
 show tables;
 ```
 
-使用浏览器：http://localhost:5173
-
-**方式3：Client、Server、MySQL 均本地运行**
-
-本地环境准备:
-- Node 16+
-- NPM 8+
-- MySQL 8+
-
-分别启动 server 和 client 端
+Start the server and client
 ```
 cd packages/server
 pnpm run start:dev
@@ -97,28 +87,58 @@ cd client
 pnpm run dev
 ```
 
-连接 MySQL
+Browser access：http://localhost:5173
+
+---
+
+**3：Client, Server, and MySQL all run locally**
+
+Local environment preparation:
+- Node 16+
+- NPM 8+
+- MySQL 8+
+
+Start the server and client
 ```
-# 请按需修改用户名和密码
+cd packages/server
+pnpm run start:dev
+
+cd ..
+cd client
+pnpm run dev
+```
+
+Connect to mysql
+```
+# Please modify the username and password as needed
 mysql -h127.0.0.1 -uroot -pPassword123#@!
 ```
 
-创建数据库表
+Create database tables
 ```
-# 将 packages/server/sql/init.sql 内容粘贴到 mysql 容器命令行中
+# Paste the contents of packages/server/sql/init.sql into the mysql command line
 show tables;
 ```
 
-使用浏览器：http://localhost:5173
+Browser access：http://localhost:5173
 
-## 常见问题
+## FAQ
+
 - [MySQL 8.0 - Client does not support authentication protocol requested by server; consider upgrading MySQL client](https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server)
 
-```
-ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'Password123#@!';
-flush privileges;
-```
+    ```
+    ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'Password123#@!';
+    flush privileges;
+    ```
+- Create authentication error under http
+     - Create certificate, verify certificate functions are only available in the security context (HTTPS) of supported browsers
+- When accessing http://localhost:5173, how to use the function of creating authentication or verifying authentication?
+     - You can use [ngrok](https://ngrok.com) as a proxy
 
-## 许可证
+    ```
+    ngrok http 5173
+    ```
 
-web-authn-completed-app 是开源项目, 许可证为 [MIT](./LICENSE)
+## License
+
+is an open source project, licensed at [MIT](./LICENSE)
