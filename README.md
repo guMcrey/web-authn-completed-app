@@ -2,7 +2,7 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-> web-authn-completed-app is a complete application based on [SimpleWebAuthn](https://simplewebauthn.dev/docs/). It allows websites to authenticate users using built-in authenticators such as Apple TouchID and Windows Hello or mobile device biometric; it can replace conventional verification methods such as passwords or SMS verification codes, and provide users with a more secure and easy login experience.
+> web-authn-completed-app is a complete application based on [SimpleWebAuthn](https://simplewebauthn.dev/docs/). It allows websites to authenticate users using built-in authenticators such as Apple TouchID and Windows Hello or mobile device biometric sensor; it can replace conventional verification methods such as passwords or SMS verification codes, and provide users with a more secure and easy login experience.
 
 ## About
 
@@ -14,7 +14,26 @@ This monorepo project contains code of client and server
 
 ## Overview
 
-💻 overview online demo: [web-authn-completed-app](https://1bb8-240e-305-1b82-ae4d-703b-ca1e-d729-14c5.jp.ngrok.io)
+💻 overview online demo: [web-authn.x-dev.club](https://web-authn.x-dev.club)
+
+What you'll need
+- One of the following devices:
+  - An Android device, preferably with a biometric sensor
+  - An iPhone or iPad with Touch ID or Face ID on iOS 14 or higher
+  - A MacBook Pro or Air with Touch ID on macOS Big Sur or higher
+  - Windows 10 19H1 or higher with Windows Hello set up
+- One of the following browsers:
+  - Google Chrome 67 or higher
+  - Microsoft Edge 85 or higher
+  - Safari 14 or higher
+
+<video width="350" height="200" controls>
+  <source src="./videos/WIN10-Microsoft Edge.mp4" type="video/mp4">
+</video>
+
+<video width="118" height="240" controls>
+  <source src="./videos/Android-Huawei browser.mp4" type="video/mp4">
+</video>
 
 ## Install
 

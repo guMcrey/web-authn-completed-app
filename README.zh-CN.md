@@ -2,7 +2,7 @@
 
 简体中文 | [英文](./README.md)
 
-> web-authn-completed-app 是一个基于 [SimpleWebAuthn](https://simplewebauthn.dev/docs/) 实现的完整应用。它允许网站使用内置的认证器（如 Apple TouchID 和 Windows Hello 或移动设备的生物识别器）对用户进行身份认证；它可以代替密码或短信验证码等常规验证方式，为用户提供更安全、轻松的登录体验。
+> web-authn-completed-app 是一个基于 [SimpleWebAuthn](https://simplewebauthn.dev/docs/) 实现的完整应用。它允许网站使用内置的认证器（如 Apple TouchID 和 Windows Hello 或移动设备的生物识别传感器）对用户进行身份认证；它可以代替密码或短信验证码等常规验证方式，为用户提供更安全、轻松的登录体验。
 
 ## 简介
 
@@ -14,7 +14,26 @@
 
 ## 预览
 
-💻 点击链接在线预览: [web-authn-completed-app](https://1bb8-240e-305-1b82-ae4d-703b-ca1e-d729-14c5.jp.ngrok.io)
+💻 点击链接在线预览: [web-authn.x-dev.club](https://web-authn.x-dev.club)
+
+设备和浏览器要求：
+- 以下任一设备
+  - 一部 Android 设备（最好带有生物识别传感器）
+  - 一部搭载 iOS 14 或更高版本且具备触控 ID 或面容 ID 功能的 iPhone 或 iPad
+  - 一部搭载 macOS Big Sur 或更高版本且具备触控 ID 功能的 MacBook Pro 或 Air
+  - 设置了 Windows Hello 的 Windows 10 19H1 或更高版本
+- 以下任一浏览器
+  - Google Chrome 67 或更高版本
+  - Microsoft Edge 85 或更高版本
+  - Safari 14 或更高版本
+
+<video width="350" height="200" controls>
+  <source src="./videos/WIN10-Microsoft Edge.mp4" type="video/mp4">
+</video>
+
+<video width="118" height="240" controls>
+  <source src="./videos/Android-Huawei browser.mp4" type="video/mp4">
+</video>
 
 ## 安装
 
