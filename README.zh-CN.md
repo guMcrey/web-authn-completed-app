@@ -27,13 +27,11 @@
   - Microsoft Edge 85 或更高版本
   - Safari 14 或更高版本
 
-<video width="350" height="200" controls>
-  <source src="./videos/WIN10-Microsoft Edge.mp4" type="video/mp4">
-</video>
-
-<video width="118" height="240" controls>
-  <source src="./videos/Android-Huawei browser.mp4" type="video/mp4">
-</video>
+<p align="left">
+  <img width="440" height="240" src="./preview/WIN10-Microsoft Edge.gif" />
+  &emsp;
+  <img width="118" height="240" src="./preview/Android-Huawei browser.gif" />
+</p>
 
 ## 安装
 
