@@ -3,14 +3,16 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted} from 'vue'
-import {useLoginUser} from '@/apis/useLogin'
+import { onMounted } from 'vue'
+import { useLoginUser } from '@/apis/useLogin'
 
-const {fetchData} = useLoginUser()
+const { fetchData } = useLoginUser()
 
 onMounted(() => {
-  const loadingEl = document.querySelector('.global-loading') as HTMLElement
-  loadingEl.style.display = 'none'
+  setTimeout(() => {
+    const loadingEl = document.querySelector('.global-loading') as HTMLElement
+    loadingEl.style.display = 'none'
+  }, 800)
   fetchData()
 })
 </script>
