@@ -28,9 +28,9 @@
   - Safari 14 或更高版本
 
 <p align="left">
-  <img width="440" height="240" src="./preview/WIN10-Microsoft Edge.gif" />
+  <img height="240" src="./preview/WIN10-Microsoft Edge.gif" />
   &emsp;
-  <img width="118" height="240" src="./preview/Android-Huawei browser.gif" />
+  <img height="240" src="./preview/Android-Huawei browser.gif" />
 </p>
 
 ## 安装
