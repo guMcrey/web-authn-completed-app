@@ -41,31 +41,31 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive} from 'vue'
-import {User, Lock} from '@element-plus/icons-vue'
-import type {FormInstance, FormRules} from 'element-plus'
-import {useLogin} from '@/apis/useLogin'
+import { ref, reactive } from 'vue'
+import { User, Lock } from '@element-plus/icons-vue'
+import type { FormInstance, FormRules } from 'element-plus'
+import { useLogin } from '@/apis/useLogin'
 
-const {loading: loginLoading, fetchData: loginHandler} = useLogin()
+const { loading: loginLoading, fetchData: loginHandler } = useLogin()
 
 const validateUsername = (rule: any, value: any, callback: any) => {
-  const regex = new RegExp(/^[0-9a-zA-Z_]{4,8}$/)
+  const regex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/)
   if (!regex.test(value)) {
     return callback(
       new Error(
-        'Please enter a 4-8 characters consisting of letter, number and underscore.'
-      )
+        'Please enter 4-8 characters starting with a letter and consisting of letters, numbers and underscores.',
+      ),
     )
   }
   callback()
 }
 const validatePassword = (rule: any, value: any, callback: any) => {
-  const regex = new RegExp(/^[0-9a-zA-Z_]{6,10}$/)
+  const regex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{5,9}$/)
   if (!regex.test(value)) {
     return callback(
       new Error(
-        'Please enter a 6-10 characters consisting of letter, number and underscore.'
-      )
+        'Please enter 6-10 characters starting with a letter and consisting of letters, numbers and underscores.',
+      ),
     )
   }
   callback()
@@ -101,7 +101,7 @@ const formRule = reactive<FormRules>({
 const signInHandler = async () => {
   const isValid = await formRef.value?.validate()
   if (!isValid) return
-  const {username, password} = form
+  const { username, password } = form
   await loginHandler(username, password)
 }
 </script>

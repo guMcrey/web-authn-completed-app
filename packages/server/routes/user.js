@@ -33,8 +33,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const usernameRegex = new RegExp(/^[0-9a-zA-Z_]{4,8}$/);
-    const passwordRegex = new RegExp(/^[0-9a-zA-Z_]{6,10}$/);
+    const usernameRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/);
+    const passwordRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{5,9}$/);
     if (!username || !password || !usernameRegex.test(username) || !passwordRegex.test(password)) {
       return res.status(400).send({
         code: 400,
