@@ -28,9 +28,9 @@ What you'll need
   - Safari 14 or higher
 
 <p align="left">
-  <img height="240" src="./preview/WIN10-Microsoft Edge.gif" />
+  <img width="500" src="./preview/WIN10-Microsoft Edge.gif" />
   &emsp;
-  <img height="240" src="./preview/Android-Huawei browser.gif" />
+  <img width="128" src="./preview/Android-Huawei browser.gif" />
 </p>
 
 ## Install
