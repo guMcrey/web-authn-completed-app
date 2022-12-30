@@ -33,7 +33,8 @@ const User = {
     },
     insertUser: async (id, username, password) => {
         const sql = 'INSERT INTO user SET ?';
-        const user = await query(SqlString.format(sql), { id, username, password });
+        const createTime = FROM_UNIXTIME(UNIX_TIMESTAMP(now()));
+        const user = await query(SqlString.format(sql), { id, username, password, createTime });
         return user;
     },
     updateUser: async (id, username) => {
