@@ -52,7 +52,7 @@
     <div class="video-area">
       <video v-if="deviceType === 'win10'" controls>
         <source
-          src="@/assets/videos/WIN10-Microsoft Edge.mp4"
+          src="@/assets/videos/WIN10-MicrosoftEdge.mp4"
           type="video/mp4"
         />
       </video>
@@ -61,7 +61,7 @@
       </video>
       <video class="video-mobile" v-if="deviceType === 'android'" controls>
         <source
-          src="@/assets/videos/Android-Huawei browser.mp4"
+          src="@/assets/videos/Android-HuaweiBrowser.mp4"
           type="video/mp4"
         />
       </video>
