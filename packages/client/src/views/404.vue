@@ -1,4 +1,5 @@
 <template>
+  <Nav />
   <div class="page-container-wrapper">
     <div class="container-image">
       <img src="@/assets/images/404.webp" alt="404" />
@@ -52,6 +53,15 @@ const goBack = () => {
 .content-subtitle
   font-size 16px
   color #3F3F3F
+  text-align center
 .el-button
   font-size 17px
+
+@media screen and (max-width 1024px)
+  .page-container-wrapper
+    padding 0 22px
+  .container-image
+    max-width 65%
+  .content-subtitle
+    font-size 13px
 </style>

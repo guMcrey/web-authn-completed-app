@@ -1,4 +1,5 @@
 <template>
+  <Nav />
   <div class="page-container-wrapper">
     <div class="page-container">
       <HomeHeader

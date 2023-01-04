@@ -52,14 +52,23 @@
     <div class="video-area">
       <video v-if="deviceType === 'win10'" controls>
         <source
+          src="@/assets/videos/WIN10-MicrosoftEdge.webm"
+          type="video/webm"
+        />
+        <source
           src="@/assets/videos/WIN10-MicrosoftEdge.mp4"
           type="video/mp4"
         />
       </video>
-      <video v-if="deviceType === 'mac'" controls>
+      <video v-show="deviceType === 'mac'" controls>
+        <source src="@/assets/videos/MAC-Safari.webm" type="video/webm" />
         <source src="@/assets/videos/MAC-Safari.mp4" type="video/mp4" />
       </video>
-      <video class="video-mobile" v-if="deviceType === 'android'" controls>
+      <video class="video-mobile" v-show="deviceType === 'android'" controls>
+        <source
+          src="@/assets/videos/Android-HuaweiBrowser.webm"
+          type="video/webm"
+        />
         <source
           src="@/assets/videos/Android-HuaweiBrowser.mp4"
           type="video/mp4"
@@ -77,9 +86,9 @@ const router = useRouter()
 const openGuideVisible = ref(false)
 const deviceType = ref('android')
 const deviceOptions = [
-  // {value: 'win10', label: 'WIN 10', browser: 'Edge'},
   {value: 'android', label: 'Android 10', browser: 'Huawei browser'},
   {value: 'mac', label: 'macOS 13', browser: 'Safari'},
+  {value: 'win10', label: 'WIN 10', browser: 'Microsoft Edge'},
 ]
 
 const viewGuide = () => {
