@@ -1,12 +1,13 @@
 <template>
+  <Nav />
   <router-view />
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { useLoginUser } from '@/apis/useLogin'
+import {onMounted} from 'vue'
+import {useLoginUser} from '@/apis/useLogin'
 
-const { fetchData } = useLoginUser()
+const {fetchData} = useLoginUser()
 
 onMounted(() => {
   setTimeout(() => {

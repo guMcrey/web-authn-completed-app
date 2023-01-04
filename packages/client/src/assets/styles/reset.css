@@ -19,4 +19,7 @@ html {
     width: 90%;
     margin: 0 auto;
   }
+  .el-dialog {
+    width: 90% !important;
+  }
 }

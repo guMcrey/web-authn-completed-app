@@ -27,7 +27,7 @@ const goBack = () => {
 
 <style lang="stylus" scoped>
 .page-container-wrapper
-  height 100vh
+  min-height calc(100vh - 51px)
   display flex
   align-items center
   justify-content center

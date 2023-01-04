@@ -69,7 +69,7 @@ onMounted(async () => {
 <style lang="stylus" scoped>
 .page-container-wrapper
   position relative
-  min-height 100vh
+  min-height calc(100vh - 51px)
   display flex
   justify-content center
   background-color #fff
