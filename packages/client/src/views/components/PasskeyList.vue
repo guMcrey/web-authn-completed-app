@@ -1,7 +1,7 @@
 <template>
   <div class="passkey-list">
     <div class="passkey-list-title">
-      Your registered credentials:
+      Your registered passkeys:
       <el-button
         class="add-key-btn"
         type="primary"
@@ -85,10 +85,10 @@ const addAuthHandler = async () => {
 
 const deleteAuthHandler = (credId: string) => {
   ElMessageBox.confirm(
-    'After removal, the device cannot log in using passkey. Continue?',
-    'Warning',
+    'Deleting the public key from the server. After deletion, you will not be able to use this passkey to log in. Do you want to continue?',
+    'Tips',
     {
-      confirmButtonText: 'OK',
+      confirmButtonText: 'Confirm',
       cancelButtonText: 'Cancel',
       type: 'warning',
     }

@@ -93,7 +93,7 @@ const findAuthAndSignIn = async (username: string) => {
   await fetchAuthByUsername(username)
   if (!authList.value.length) {
     ElMessageBox.alert(
-      "You don't have a passkey yet. Please use username & password to sign in.",
+      "You don't have a key yet. Please log in with the username and password first, and then try again after registering the passkey.",
       'No passkey',
       {
         type: 'info',

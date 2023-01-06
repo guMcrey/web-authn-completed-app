@@ -104,7 +104,8 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
             attestationType: 'none',
             excludeCredentials,
             authenticatorSelection: {
-                authenticatorAttachment: 'platform',
+                // TODO: mobile use platform, desktop set null
+                // authenticatorAttachment: 'platform',
             }
         })
 
@@ -204,10 +205,12 @@ router.post('/signinRequest', async (req, res) => {
         }
 
         const options = await fido2.generateAuthenticationOptions({
+            // TODO: weather set as [];
             allowCredentials,
             attestationType: 'none',
             authenticatorSelection: {
-                authenticatorAttachment: 'platform',
+                // TODO: mobile use platform, desktop set null
+                // authenticatorAttachment: 'platform',
             }
         });
 

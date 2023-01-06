@@ -12,7 +12,10 @@ export const useLoginUser = () => {
   const fetchData = async () => {
     try {
       loading.value = true
-      await axios.get(`/is-login`)
+      const {data} = await axios.get(`/is-login`)
+      if (data.code === 200) {
+        router.push('/home')
+      }
     } catch (err) {
       router.push('/')
     } finally {

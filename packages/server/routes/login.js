@@ -12,7 +12,11 @@ const errorObj = {
 // check user login status
 router.get('/is-login', sessionCheck, async (req, res) => {
     try {
-        res.status(200).send('login success.');
+        res.status(200).send({
+            code: 200,
+            data: {},
+            message: 'login success.'
+        });
     } catch (err) {
         Object.assign(errorObj, { message: err });
         res.status(500).send(errorObj)

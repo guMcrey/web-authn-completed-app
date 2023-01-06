@@ -72,6 +72,10 @@ export const useRegisterRequest = () => {
       Object.assign(data, registerResult)
       localStorage.setItem(`credId`, registerResult.id)
     } catch (e) {
+      const errorObj = e as any
+      if (['InvalidStateError', 'NotAllowedError'].includes(errorObj.name)) {
+        return console.warn(errorObj.message)
+      }
       handleError(e)
     } finally {
       loading.value = false
@@ -145,6 +149,10 @@ export const useSignInRequest = () => {
       localStorage.setItem('username', username)
       localStorage.setItem(`challenge`, options.challenge)
     } catch (e) {
+      const errorObj = e as any
+      if (errorObj.name === 'NotAllowedError') {
+        return console.warn(errorObj.message)
+      }
       handleError(e)
     } finally {
       loading.value = false
