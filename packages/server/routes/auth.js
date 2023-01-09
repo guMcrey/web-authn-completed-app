@@ -105,7 +105,7 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
             excludeCredentials,
             authenticatorSelection: {
                 // TODO: mobile use platform, desktop set null
-                // authenticatorAttachment: 'platform',
+                authenticatorAttachment: 'platform',
             }
         })
 
@@ -210,7 +210,7 @@ router.post('/signinRequest', async (req, res) => {
             attestationType: 'none',
             authenticatorSelection: {
                 // TODO: mobile use platform, desktop set null
-                // authenticatorAttachment: 'platform',
+                authenticatorAttachment: 'platform',
             }
         });
 
