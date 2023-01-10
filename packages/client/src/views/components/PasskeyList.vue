@@ -117,6 +117,7 @@ const resetHandler = () => {
 <style lang="stylus" scoped>
 .passkey-list
   margin 10px 0
+  min-height 260px
 .passkey-list-title
   font-size 16px
   font-weight 500

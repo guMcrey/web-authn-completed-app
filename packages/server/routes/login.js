@@ -10,9 +10,16 @@ const errorObj = {
 }
 
 // check user login status
-router.get('/is-login', sessionCheck, async (req, res) => {
+router.get('/is-login', async (req, res) => {
     try {
-        res.status(200).send({
+        if (req.session['signed-in'] !== 'yes') {
+            return res.status(200).send({
+                code: 401,
+                data: {},
+                message: 'not signed in.'
+            });
+        }
+        return res.status(200).send({
             code: 200,
             data: {},
             message: 'login success.'

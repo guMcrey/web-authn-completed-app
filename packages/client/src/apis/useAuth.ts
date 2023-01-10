@@ -1,5 +1,6 @@
 import {ref, reactive} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
+import 'element-plus/es/components/message-box/style/css'
 import {useRouter} from 'vue-router'
 import {axios} from '@/lib/axios'
 import {handleError} from '@/lib/errorHandler'
@@ -70,7 +71,6 @@ export const useRegisterRequest = () => {
       })
       const registerResult = await startRegistration(options)
       Object.assign(data, registerResult)
-      localStorage.setItem(`credId`, registerResult.id)
     } catch (e) {
       const errorObj = e as any
       if (['InvalidStateError', 'NotAllowedError'].includes(errorObj.name)) {
@@ -95,7 +95,6 @@ export const useRegisterResponse = () => {
     try {
       loading.value = true
       await axios.post(`/auth/registerResponse?username=${username}`, options)
-      localStorage.removeItem('challenge')
     } catch (e) {
       handleError(e)
     } finally {
@@ -121,33 +120,15 @@ export const useSignInRequest = () => {
     type: 'public-key',
   })
   const loading = ref(false)
-  const confirmHandler = async (username: string) => {
+  const confirmHandler = async () => {
     try {
       loading.value = true
       const opts = {}
-      const credId = localStorage.getItem(`credId`)
-      if (!credId) {
-        ElMessageBox.alert(
-          'Passkey is unavailable because data may not exist due to clearing cache.',
-          'No passkey',
-          {
-            type: 'info',
-            confirmButtonText: 'OK',
-          }
-        )
-        return
-      }
 
-      const {data: options} = await axios.post(
-        `/auth/signinRequest?credId=${encodeURIComponent(
-          credId
-        )}&username=${username}`,
-        opts
-      )
+      const {data: options} = await axios.post(`/auth/signinRequest`, opts)
       const signInRequestData = await startAuthentication(options)
+
       Object.assign(data, signInRequestData)
-      localStorage.setItem('username', username)
-      localStorage.setItem(`challenge`, options.challenge)
     } catch (e) {
       const errorObj = e as any
       if (errorObj.name === 'NotAllowedError') {
@@ -164,23 +145,36 @@ export const useSignInRequest = () => {
 // sign in with passkey response
 export const useSignInResponse = () => {
   const loading = ref(false)
+  const data: IAuthItem = reactive({
+    credId: '',
+  })
   const router = useRouter()
-  const confirmHandler = async (
-    options: IRegisterOptions,
-    username: string
-  ) => {
+  const confirmHandler = async (options: IRegisterOptions) => {
     try {
       loading.value = true
-      await axios.post('/auth/signinResponse', options)
-      localStorage.setItem('username', username)
+      const {data: resultData} = await axios.post(
+        '/auth/signinResponse',
+        options
+      )
+      localStorage.setItem('username', resultData.username)
+      Object.assign(data, resultData)
       router.push('/home')
-      localStorage.removeItem(`challenge`)
     } catch (e) {
+      const errorCode = (e as any)?.response?.data?.code
+      if (errorCode === 404) {
+        return ElMessageBox.alert(
+          'The public key associated with the user was not found. Unable to authenticate login now. Please log in with another method and register the passkey and try again.',
+          'No valid public key was matched',
+          {
+            confirmButtonText: 'OK',
+          }
+        )
+      }
       handleError(e)
     } finally {
       loading.value = false
     }
   }
 
-  return {loading, confirmHandler}
+  return {data, loading, confirmHandler}
 }

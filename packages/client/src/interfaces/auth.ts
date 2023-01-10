@@ -1,16 +1,15 @@
 export interface IAuthItem {
   credId: string
-  username: string
-  publicKey: string
-  prevCounter: number
+  username?: string
+  publicKey?: string
+  prevCounter?: number
   deviceName?: string
 }
 
 export interface IRegisterOptions {
   id: string
   rawId: string
-  // "platform"
-  authenticatorAttachment: string
+  authenticatorAttachment?: string
   clientExtensionResults: {}
   response: {
     attestationObject: string

@@ -12,13 +12,11 @@
         <div class="content-title">Sign in</div>
         <div class="content-detail">
           <SignInWithPasskey
-            :username="username"
-            :getAuthLoading="getAuthLoading"
-            :authList="authList"
             :authAvailable="isAuthenticatorAvailable"
             :clickType="clickType"
             @click="clickSignInWithPasskeyHandler"
             @clear="clickType = ''"
+            @authSuccess="authSuccessCallback"
           />
           <InfoTip v-if="!isAuthenticatorAvailable" />
           <div class="or-title">or</div>
@@ -34,25 +32,13 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, onMounted, computed} from 'vue'
+import {ref, onMounted} from 'vue'
 import SignInWithPasskey from './components/SignInWithPasskey.vue'
 import LoginForm from './components/LoginForm.vue'
-import {useGetAuthByUsername} from '@/apis/useAuth'
-import {ElMessageBox} from 'element-plus'
-import 'element-plus/es/components/message-box/style/css'
-
-const {
-  data: authList,
-  loading: getAuthLoading,
-  fetchData: fetchAuthByUsername,
-} = useGetAuthByUsername()
+import {ElMessage} from 'element-plus'
 
 const isAuthenticatorAvailable = ref(false)
 const clickType = ref('')
-
-const username = computed(() => {
-  return localStorage.getItem('username') || ''
-})
 
 const authenticatorAvailable = async () => {
   if (window.PublicKeyCredential) {
@@ -64,46 +50,11 @@ const authenticatorAvailable = async () => {
 
 const clickSignInWithPasskeyHandler = async () => {
   if (!isAuthenticatorAvailable.value) return
-  if (!username.value) {
-    ElMessageBox.prompt(
-      'Username supports letters, numbers and underscores.',
-      'Username',
-      {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        inputPlaceholder: 'Enter your username',
-        inputPattern: /^[0-9a-zA-Z_]{4,8}$/,
-        inputErrorMessage:
-          'Please enter a 4-8 characters consisting of letter, number and underscore.',
-      }
-    )
-      .then(async ({value}) => {
-        await findAuthAndSignIn(value)
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-    return
-  }
-
-  await findAuthAndSignIn(username.value)
+  clickType.value = 'login'
 }
 
-const findAuthAndSignIn = async (username: string) => {
-  await fetchAuthByUsername(username)
-  if (!authList.value.length) {
-    ElMessageBox.alert(
-      "You don't have a key yet. Please log in with the username and password first, and then try again after registering the passkey.",
-      'No passkey',
-      {
-        type: 'info',
-        confirmButtonText: 'OK',
-      }
-    )
-    return
-  }
-
-  clickType.value = 'login'
+const authSuccessCallback = () => {
+  ElMessage.success('Login successful.')
 }
 
 onMounted(() => {

@@ -165,7 +165,7 @@ const jumpToIndex = () => {
   justify-content space-between
   gap 20px
 .device-type-browser
-  color var(--el-text-color-secondary)
+  color #909399
   font-size 13px
 .device-type-title
   font-size 15px
