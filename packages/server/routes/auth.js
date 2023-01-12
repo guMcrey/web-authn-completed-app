@@ -67,6 +67,7 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
         const RP_NAME = 'Web Authn Completed App';
         const { username } = req.body;
         const usernameRegex = new RegExp(/^[0-9a-zA-Z_]{4,8}$/);
+
         if (!username || !usernameRegex.test(username)) {
             return res.status(400).send({
                 code: 400,
@@ -102,11 +103,8 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
             userID: userInfo[0].id,
             userName: userInfo[0].username,
             attestationType: 'none',
+            userVerification: 'required',
             excludeCredentials,
-            authenticatorSelection: {
-                // TODO: mobile use platform, desktop set null
-                authenticatorAttachment: 'platform',
-            }
         })
 
         req.session.challenge = options.challenge;
@@ -173,45 +171,10 @@ router.post('/registerResponse', sessionCheck, async (req, res) => {
 // sign in with auth request
 router.post('/signinRequest', async (req, res) => {
     try {
-        const { username, credId } = req.query
-        const usernameRegex = new RegExp(/^[0-9a-zA-Z_]{4,8}$/);
-        if (!username || !usernameRegex.test(username)) {
-            return res.status(400).send({
-                code: 400,
-                data: {},
-                message: 'username is invalid',
-            })
-        }
-
-        const userInfo = await queryUsers({ username });
-        if (!userInfo.length) {
-            return res.status(400).send({
-                code: 400,
-                data: {},
-                message: 'user not exist',
-            })
-        }
-
-        const authInfo = await queryAuths({ username });
-        const allowCredentials = [];
-        for (const auth of authInfo) {
-            if (credId && auth.credId == credId) {
-                allowCredentials.push({
-                    id: base64url.toBuffer(auth.credId),
-                    type: 'public-key',
-                    transports: ['internal']
-                });
-            }
-        }
-
         const options = await fido2.generateAuthenticationOptions({
-            // TODO: weather set as [];
-            allowCredentials,
+            allowCredentials: [],
             attestationType: 'none',
-            authenticatorSelection: {
-                // TODO: mobile use platform, desktop set null
-                authenticatorAttachment: 'platform',
-            }
+            userVerification: 'required',
         });
 
         req.session.challenge = options.challenge;
@@ -273,8 +236,15 @@ router.post('/signinResponse', async (req, res) => {
 
         delete req.session.challenge;
         req.session['signed-in'] = 'yes';
-        res.status(200).send({ id: body.id });
+        res.status(200).send({ credId: body.id, username: credential.username });
     } catch (err) {
+        if (err.message.search('undefined')) {
+            return res.status(200).send({
+                code: 404,
+                data: {},
+                message: err.message
+            })
+        }
         Object.assign(errorObj, { message: err.message || err });
         res.status(500).send(errorObj);
         delete req.session.challenge;

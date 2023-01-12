@@ -30,21 +30,21 @@ export function handleError(error: any) {
       }
       errorTipFunction(
         `${
-          response.data.message.code ||
-          response.data.message ||
+          response.data?.message?.code ||
+          response.data?.message ||
           response.statusText ||
           response.data ||
-          error.message
+          error?.message
         }`
       )
     } else if (error.request) {
-      errorTipFunction(`${error.message}` || `Network error`)
+      errorTipFunction(`${error?.message}` || `Network error`)
     } else {
       errorTipFunction(`Network error: retry after checking network status`)
     }
   } else if (isCustomError(error)) {
-    errorTipFunction(`${error.message || error.msg}`)
+    errorTipFunction(`${error?.message}`)
   } else {
-    errorTipFunction(`Frontend logic exception: ${(error as any).message}: `)
+    errorTipFunction(`Frontend logic exception: ${(error as any)?.message}: `)
   }
 }

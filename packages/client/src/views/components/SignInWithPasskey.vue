@@ -3,7 +3,7 @@
     <el-button
       type="primary"
       size="large"
-      :loading="getAuthLoading || signInRequestLoading || signInResponseLoading"
+      :loading="signInRequestLoading || signInResponseLoading"
       :disabled="!authAvailable"
       round
     >
@@ -16,11 +16,8 @@
 </template>
 
 <script lang="ts" setup>
-import {watch, PropType} from 'vue'
-import {ElMessageBox} from 'element-plus'
-import 'element-plus/es/components/message-box/style/css'
+import {watch} from 'vue'
 import {useSignInRequest, useSignInResponse} from '@/apis/useAuth'
-import {IAuthItem} from '@/interfaces/auth'
 
 const props = defineProps({
   buttonText: {
@@ -32,18 +29,6 @@ const props = defineProps({
     default: false,
   },
   clickType: {
-    type: String,
-    default: '',
-  },
-  authList: {
-    type: Array as PropType<IAuthItem[]>,
-    default: () => [],
-  },
-  getAuthLoading: {
-    type: Boolean,
-    default: false,
-  },
-  username: {
     type: String,
     default: '',
   },
@@ -59,26 +44,15 @@ const {
 
 const {
   loading: signInResponseLoading,
+  data: signInResponseData,
   confirmHandler: signInResponseHandler,
 } = useSignInResponse()
 
 const signInHandler = async () => {
-  await signInRequestHandler(props.username)
-  const credId = localStorage.getItem(`credId`)
-  const challenge = localStorage.getItem('challenge')
-  if (!signInRequestData || !challenge) return
-  if (!credId) {
-    ElMessageBox.alert(
-      'Passkey is unavailable because data may not exist due to clearing cache.',
-      'No passkey',
-      {
-        type: 'info',
-        confirmButtonText: 'OK',
-      }
-    )
-    return
-  }
-  await signInResponseHandler(signInRequestData, props.username)
+  await signInRequestHandler()
+  if (!signInRequestData?.id) return
+  await signInResponseHandler(signInRequestData)
+  if (!signInResponseData?.credId) return
   emits('authSuccess')
 }
 
