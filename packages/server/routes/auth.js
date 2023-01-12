@@ -238,7 +238,7 @@ router.post('/signinResponse', async (req, res) => {
         req.session['signed-in'] = 'yes';
         res.status(200).send({ credId: body.id, username: credential.username });
     } catch (err) {
-        if (err.message.search('undefined')) {
+        if (err.message.search('undefined') !== -1) {
             return res.status(200).send({
                 code: 404,
                 data: {},

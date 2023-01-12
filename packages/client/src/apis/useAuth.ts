@@ -160,7 +160,7 @@ export const useSignInResponse = () => {
       Object.assign(data, resultData)
       router.push('/home')
     } catch (e) {
-      const errorCode = (e as any)?.response?.data?.code
+      const errorCode = (e as any)?.code
       if (errorCode === 404) {
         return ElMessageBox.alert(
           'The public key associated with the user was not found. Unable to authenticate login now. Please log in with another method and register the passkey and try again.',
