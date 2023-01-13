@@ -4,6 +4,7 @@ export interface IAuthItem {
   publicKey?: string
   prevCounter?: number
   deviceName?: string
+  createTime?: string
 }
 
 export interface IRegisterOptions {

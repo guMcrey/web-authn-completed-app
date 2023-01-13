@@ -13,9 +13,9 @@ const queryAuths = async ({ query, credId, username, deviceName }) => {
 }
 
 const createAuth = async ({ credId, username, publicKey, prevCounter, userAgent }) => {
-    const { name: browserName } = deviceInfo(userAgent)?.browser
+    const { name: browserName, version: browserVersion } = deviceInfo(userAgent)?.browser
     const { name: osName, version: osVersion } = deviceInfo(userAgent)?.os
-    const deviceName = `${browserName} - ${osName} ${osVersion}`;
+    const deviceName = `${browserName} ${browserVersion} - ${osName} ${osVersion}`;
     const auth = await authModel.insertAuth(credId, username, publicKey, prevCounter, deviceName);
     return auth;
 }

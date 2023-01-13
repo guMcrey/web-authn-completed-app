@@ -1,36 +1,55 @@
 <template>
   <div class="passkey-list">
-    <div class="passkey-list-title">
-      Your registered passkeys:
-      <el-button
-        class="add-key-btn"
-        type="primary"
-        circle
-        :icon="Plus"
-        :loading="registerRequestLoading || registerResponseLoading"
-        @click="addAuthHandler"
-      ></el-button>
+    <div class="passkey-list-header">
+      <div class="passkey-list-header-title">
+        The following devices are configured for your account
+      </div>
+      <div v-show="authList.length" class="passkey-list-header-count">
+        {{ authList.length }}
+      </div>
     </div>
+
+    <el-button
+      class="add-key-btn"
+      type="primary"
+      round
+      size="large"
+      :loading="registerRequestLoading || registerResponseLoading"
+      @click="addAuthHandler"
+    >
+      <template #icon>
+        <img class="identify-icon" src="@/assets/images/identify-icon.svg" />
+      </template>
+      Add WebAuthn Device
+    </el-button>
     <template v-if="authList.length">
       <div v-for="item in authList" class="passkey-item">
         <div class="item-detail">
           <div class="item-public-key-device">
-            {{ item.deviceName || '-' }}
+            <el-icon><Monitor /></el-icon> {{ item.deviceName || '-' }}
           </div>
           <div class="item-public-key-id">
-            {{ item.publicKey || '-' }}
+            <el-icon><Key /></el-icon> {{ item.publicKey || '-' }}
+          </div>
+          <div class="item-public-key-create-time">
+            <el-icon><Timer /></el-icon>
+            {{ formatDate(item.createTime) || '-' }}
           </div>
         </div>
         <el-button
-          type="danger"
           circle
           :icon="Delete"
+          size="large"
           :loading="deleteAuthLoading"
           @click="deleteAuthHandler(item.credId)"
         />
       </div>
     </template>
-    <el-empty v-if="!authList.length" :image-size="100"></el-empty>
+    <el-empty
+      v-if="!authList.length"
+      :image-size="100"
+      description="No devices are configured."
+    ></el-empty>
   </div>
 </template>
 
@@ -38,13 +57,14 @@
 import {PropType} from 'vue'
 import {ElMessageBox} from 'element-plus'
 import 'element-plus/es/components/message-box/style/css'
-import {Delete, Plus} from '@element-plus/icons-vue'
+import {Delete, Plus, Monitor, Key, Timer} from '@element-plus/icons-vue'
 import {IAuthItem} from '@/interfaces/auth'
 import {
   useRegisterRequest,
   useRegisterResponse,
   useDeleteAuth,
 } from '@/apis/useAuth'
+import {formatDate} from '@/lib/functions'
 
 const {
   data: registerRequestData,
@@ -116,30 +136,59 @@ const resetHandler = () => {
 
 <style lang="stylus" scoped>
 .passkey-list
-  margin 10px 0
-  min-height 260px
-.passkey-list-title
-  font-size 16px
-  font-weight 500
-.passkey-item
-  padding 15px 0
+  margin 20px 0
+.passkey-list-header
   display flex
   align-items center
+  gap 12px
+  padding-bottom 15px
+  border-bottom 1px solid #e5e5e5
+.passkey-list-header-title
+  font-size 17px
+  font-weight 600
+.passkey-list-header-count
+  font-size 15px
+  font-weight 600
+  padding 4px 10px
+  border-radius 38%
+  border 1px solid #ddd
+.passkey-item
+  padding 12px 0
+  display flex
+  align-items flex-start
   justify-content space-between
   gap 20px
-  border-bottom 1px solid #f1f1f1
+  border-bottom 1px dashed #f1f1f1
 .item-detail
   overflow hidden
   flex 1
   width 0
 .item-public-key-device
   font-size 15px
-  font-weight bold
+  font-weight 600
+  display flex
+  align-items center
+  gap 10px
+  color #606060
 .item-public-key-id
-  margin-top 5px
+  margin-top 13px
   font-size 15px
-  color #888
+  color #606060
   overflow hidden
   text-overflow ellipsis
   white-space nowrap
+  display flex
+  align-items center
+  gap 10px
+.item-public-key-create-time
+  margin-top 8px
+  font-size 15px
+  color #909090
+  display flex
+  align-items center
+  gap 10px
+.add-key-btn
+  margin 15px 0
+.identify-icon
+  width 16px
 </style>

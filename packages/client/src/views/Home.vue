@@ -75,7 +75,7 @@ onMounted(async () => {
   justify-content center
   background-color #fff
 .page-container
-  width 700px
+  width 750px
   padding 50px 27px 30px
 
 @media screen and (max-width 1024px)

@@ -33,7 +33,8 @@ const Auth = {
     },
     insertAuth: async (credId, username, publicKey, prevCounter, deviceName) => {
         const sql = 'INSERT INTO credential SET ?';
-        const credential = await query(SqlString.format(sql), { credId, username, publicKey, prevCounter, deviceName });
+        const createTime = new Date().toISOString();
+        const credential = await query(SqlString.format(sql), { credId, username, publicKey, prevCounter, deviceName, createTime });
         return credential;
     },
     updateAuth: async (credId, prevCounter) => {

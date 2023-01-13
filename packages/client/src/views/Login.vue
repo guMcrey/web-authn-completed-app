@@ -71,10 +71,10 @@ onMounted(() => {
   justify-content center
   background-color #fff
 .page-container
-  width 700px
+  width 750px
 .container-header
   width 120px
-  min-height 92px
+  min-height 95px
   border-radius 100%
   margin 0 auto
   img
