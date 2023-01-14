@@ -29,9 +29,9 @@ What you'll need
   - visit [Can I use](https://www.yuque.com/r/goto?url=https%3A%2F%2Fcaniuse.com%2F%3Fsearch%3DwebAuthn) to get more information
 
 <p align="left">
-  <img width="500" src="./preview/WIN10-Microsoft Edge.gif" />
+  <img width="400" src="./preview/Edge108-WIN10.gif" />
   &emsp;
-  <img width="128" src="./preview/Android-Huawei browser.gif" />
+  <img width="400" src="./preview/MobileSafari14-IOS14.gif" />
 </p>
 
 *All user data registered through web-authn.x-dev.club will not be used and is only for demo user statistics. If you are still concerned, you can email itgumx@163.com to delete the data.*

@@ -69,9 +69,9 @@
   - 更多浏览器兼容性请查看 [Can I use](https://www.yuque.com/r/goto?url=https%3A%2F%2Fcaniuse.com%2F%3Fsearch%3DwebAuthn)
 
 <p align="left">
-  <img width="500" src="./preview/WIN10-Microsoft Edge.gif" />
+  <img width="400" src="./preview/Edge108-WIN10.gif" />
   &emsp;
-  <img width="128" src="./preview/Android-Huawei browser.gif" />
+  <img width="400" src="./preview/MobileSafari14-IOS14.gif" />
 </p>
 
 *声明：所有通过 [web-authn.x-dev.club](https://web-authn.x-dev.club) 注册的用户数据不会被使用，仅用于 demo 用户统计，如仍介意可以发邮件到 itgumx@163.com 删除数据*

@@ -52,25 +52,21 @@
     <div class="video-area">
       <video v-if="deviceType === 'win10'" controls>
         <source
-          src="@/assets/videos/WIN10-MicrosoftEdge.webm"
+          src="@/assets/videos/Edge108-WIN10.webm"
           type="video/webm"
         />
         <source
-          src="@/assets/videos/WIN10-MicrosoftEdge.mp4"
+          src="@/assets/videos/Edge108-WIN10.mp4"
           type="video/mp4"
         />
       </video>
-      <video v-show="deviceType === 'mac'" controls>
-        <source src="@/assets/videos/MAC-Safari.webm" type="video/webm" />
-        <source src="@/assets/videos/MAC-Safari.mp4" type="video/mp4" />
-      </video>
-      <video class="video-mobile" v-show="deviceType === 'android'" controls>
+      <video v-if="deviceType === 'mobile-ios'" controls>
         <source
-          src="@/assets/videos/Android-HuaweiBrowser.webm"
+          src="@/assets/videos/MobileSafari14-IOS14.webm"
           type="video/webm"
         />
         <source
-          src="@/assets/videos/Android-HuaweiBrowser.mp4"
+          src="@/assets/videos/MobileSafari14-IOS14.mp4"
           type="video/mp4"
         />
       </video>
@@ -84,11 +80,10 @@ import {useRouter} from 'vue-router'
 
 const router = useRouter()
 const openGuideVisible = ref(false)
-const deviceType = ref('android')
+const deviceType = ref('win10')
 const deviceOptions = [
-  {value: 'android', label: 'Android 10', browser: 'Huawei browser'},
-  {value: 'mac', label: 'macOS 13', browser: 'Safari'},
-  {value: 'win10', label: 'WIN 10', browser: 'Microsoft Edge'},
+  {value: 'win10', label: 'Windows 10', browser: 'Edge 108.0.1462.76'},
+  {value: 'mobile-ios', label: 'IOS 14', browser: 'Mobile Safari 14.1.1'},
 ]
 
 const viewGuide = () => {
