@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="container-title">Hello, {{ username }}</div>
+    <div class="container-header">
+      <div class="container-title">Hello, {{ username }}</div>
+      <Logout />
+    </div>
     <el-card class="passkey-card">
       <div class="card-title">Passwordless Authentication</div>
       <div class="card-subtitle">
@@ -13,6 +16,8 @@
 </template>
 
 <script lang="ts" setup>
+import Logout from './Logout.vue'
+
 defineProps({
   username: {
     type: String,
@@ -26,6 +31,11 @@ defineProps({
 </script>
 
 <style lang="stylus" scoped>
+.container-header
+  display flex
+  align-items center
+  justify-content space-between
+  gap 10px
 .container-title
   font-size 26px
   font-weight bold

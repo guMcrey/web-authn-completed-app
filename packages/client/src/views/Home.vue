@@ -17,12 +17,6 @@
         :authList="authList"
         @change="fetchAuthByUsername(username)"
       ></PasskeyList>
-      <TryReauthAndLogout
-        :username="username"
-        :getAuthLoading="getAuthLoading"
-        :authList="authList"
-        :authAvailable="isAuthenticatorAvailable"
-      />
     </div>
   </div>
 </template>
@@ -32,7 +26,6 @@ import {ref, computed, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
 import HomeHeader from './components/HomeHeader.vue'
 import PasskeyList from './components/PasskeyList.vue'
-import TryReauthAndLogout from './components/TryReauthAndLogout.vue'
 import {useGetAuthByUsername} from '@/apis/useAuth'
 
 const {
@@ -69,6 +62,7 @@ onMounted(async () => {
 
 <style lang="stylus" scoped>
 .page-container-wrapper
+  margin-top 51px
   position relative
   min-height calc(100vh - 51px)
   display flex

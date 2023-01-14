@@ -110,7 +110,7 @@ const jumpToIndex = () => {
 
 <style lang="stylus" scoped>
 .header-container
-  position sticky
+  position fixed
   top 0
   right 0
   left 0

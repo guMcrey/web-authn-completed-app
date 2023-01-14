@@ -5,6 +5,14 @@ html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d0d0d9;
+  border-radius: 2px;
+}
+
 @media screen and (max-width: 1024px) {
   .el-overlay-message-box {
     text-align: center;

@@ -26,14 +26,20 @@
       <div v-for="item in authList" class="passkey-item">
         <div class="item-detail">
           <div class="item-public-key-device">
-            <el-icon><Monitor /></el-icon> {{ item.deviceName || '-' }}
+            <el-icon><Monitor /></el-icon> 
+            <span class="detail-text">
+              {{ item.deviceName || '-' }}
+            </span>
           </div>
           <div class="item-public-key-id">
-            <el-icon><Key /></el-icon> {{ item.publicKey || '-' }}
+            <el-icon><Key /></el-icon>
+            <span class="detail-text">{{ item.publicKey || '-' }}</span> 
           </div>
           <div class="item-public-key-create-time">
             <el-icon><Timer /></el-icon>
-            {{ formatDate(item.createTime) || '-' }}
+            <span class="detail-text">
+              {{ formatDate(item.createTime) || '-' }}
+            </span>
           </div>
         </div>
         <el-button
@@ -57,7 +63,7 @@
 import {PropType} from 'vue'
 import {ElMessageBox} from 'element-plus'
 import 'element-plus/es/components/message-box/style/css'
-import {Delete, Plus, Monitor, Key, Timer} from '@element-plus/icons-vue'
+import {Delete, Monitor, Key, Timer} from '@element-plus/icons-vue'
 import {IAuthItem} from '@/interfaces/auth'
 import {
   useRegisterRequest,
@@ -160,7 +166,6 @@ const resetHandler = () => {
   gap 20px
   border-bottom 1px dashed #f1f1f1
 .item-detail
-  overflow hidden
   flex 1
   width 0
 .item-public-key-device
@@ -174,9 +179,6 @@ const resetHandler = () => {
   margin-top 13px
   font-size 15px
   color #606060
-  overflow hidden
-  text-overflow ellipsis
-  white-space nowrap
   display flex
   align-items center
   gap 10px
@@ -191,4 +193,8 @@ const resetHandler = () => {
   margin 15px 0
 .identify-icon
   width 16px
+.detail-text
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
 </style>

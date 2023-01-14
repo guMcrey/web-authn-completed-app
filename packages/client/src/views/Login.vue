@@ -64,6 +64,7 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 .page-container-wrapper
+  margin-top 51px
   position relative
   min-height calc(100vh - 51px)
   display flex
