@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `user`(
 
 
 CREATE TABLE IF NOT EXISTS `credential`(
-    `credId` VARCHAR(86) NOT NULL,
+    `credId` VARCHAR(172) NOT NULL,
     `username` VARCHAR(16) NOT NULL,
     `publicKey` TEXT NOT NULL,
     `prevCounter` INT UNSIGNED,

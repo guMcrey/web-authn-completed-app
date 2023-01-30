@@ -14,6 +14,7 @@ export const useLoginUser = () => {
       loading.value = true
       const {data} = await axios.get(`/is-login`)
       if (data.code === 200 && ['/home', '/'].includes(router.options.history.location)) {
+        window.scrollTo(0, 0)
         router.push('/home')
       }
     } catch (err) {
@@ -36,6 +37,7 @@ export const useLogin = () => {
       loading.value = true
       await axios.post(`/login`, {username, password})
       ElMessage.success('Login successful.')
+      window.scrollTo(0, 0)
       router.push('/home')
       localStorage.setItem('username', username)
     } catch (e) {
