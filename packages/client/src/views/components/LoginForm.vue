@@ -41,20 +41,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { User, Lock } from '@element-plus/icons-vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import { useLogin } from '@/apis/useLogin'
+import {ref, reactive} from 'vue'
+import {User, Lock} from '@element-plus/icons-vue'
+import type {FormInstance, FormRules} from 'element-plus'
+import {useLogin} from '@/apis/useLogin'
 
-const { loading: loginLoading, fetchData: loginHandler } = useLogin()
+const {loading: loginLoading, fetchData: loginHandler} = useLogin()
 
 const validateUsername = (rule: any, value: any, callback: any) => {
   const regex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/)
   if (!regex.test(value)) {
     return callback(
       new Error(
-        'Please enter 4-8 characters starting with a letter and consisting of letters, numbers and underscores.',
-      ),
+        'Please enter 4-8 characters starting with a letter and consisting of letters, numbers and underscores.'
+      )
     )
   }
   callback()
@@ -64,8 +64,8 @@ const validatePassword = (rule: any, value: any, callback: any) => {
   if (!regex.test(value)) {
     return callback(
       new Error(
-        'Please enter 6-10 characters starting with a letter and consisting of letters, numbers and underscores.',
-      ),
+        'Please enter 6-10 characters starting with a letter and consisting of letters, numbers and underscores.'
+      )
     )
   }
   callback()
@@ -101,7 +101,7 @@ const formRule = reactive<FormRules>({
 const signInHandler = async () => {
   const isValid = await formRef.value?.validate()
   if (!isValid) return
-  const { username, password } = form
+  const {username, password} = form
   await loginHandler(username, password)
 }
 </script>

@@ -8,7 +8,7 @@
       ></HomeHeader>
       <InfoTip
         v-if="!isAuthenticatorAvailable"
-        content="This device or browser does not support User Verifying Platform Authenticator. You can't register a credential."
+        content="This device or browser does not support User Verifying Platform Authenticator. You can't add a WebAuthn device."
       />
       <PasskeyList
         v-if="isAuthenticatorAvailable"

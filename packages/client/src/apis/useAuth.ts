@@ -6,6 +6,9 @@ import {axios} from '@/lib/axios'
 import {handleError} from '@/lib/errorHandler'
 import {startRegistration, startAuthentication} from '@simplewebauthn/browser'
 import {IAuthItem, IRegisterOptions} from '@/interfaces/auth'
+import {clientType} from '@/lib/functions'
+
+const isAndroid = clientType() === 'Android' ? true : false
 
 // get passkey by username
 export const useGetAuthByUsername = () => {
@@ -68,12 +71,17 @@ export const useRegisterRequest = () => {
       loading.value = true
       const {data: options} = await axios.post(`/auth/registerRequest`, {
         username,
+        isAndroid,
       })
       const registerResult = await startRegistration(options)
       Object.assign(data, registerResult)
+      localStorage.setItem(`credId`, registerResult.id)
     } catch (e) {
       const errorObj = e as any
-      if (['InvalidStateError', 'NotAllowedError'].includes(errorObj.name)) {
+      const errorList = isAndroid
+        ? ['NotAllowedError']
+        : ['InvalidStateError', 'NotAllowedError']
+      if (errorList.includes(errorObj.name)) {
         return console.warn(errorObj.message)
       }
       handleError(e)
@@ -120,14 +128,34 @@ export const useSignInRequest = () => {
     type: 'public-key',
   })
   const loading = ref(false)
-  const confirmHandler = async () => {
+
+  const confirmHandler = async (username?: string) => {
     try {
       loading.value = true
       const opts = {}
+      const credId = localStorage.getItem('credId') || ''
+      let postUrl = `/auth/signinRequest`
 
-      const {data: options} = await axios.post(`/auth/signinRequest`, opts)
+      if (isAndroid) {
+        if (!credId) {
+          ElMessageBox.alert(
+            '<p><strong>Please log in with username and password, then add the webAuthn device again.</strong></p><p>( Passkey is unavailable because data may not exist due to clearing cache )</p>',
+            'Passkey is not available',
+            {
+              type: 'info',
+              confirmButtonText: 'OK',
+              dangerouslyUseHTMLString: true,
+            }
+          )
+          return
+        }
+        postUrl = `/auth/signinRequest?credId=${encodeURIComponent(
+          credId
+        )}&username=${username}&isAndroid=${isAndroid}`
+      }
+
+      const {data: options} = await axios.post(postUrl, opts)
       const signInRequestData = await startAuthentication(options)
-
       Object.assign(data, signInRequestData)
     } catch (e) {
       const errorObj = e as any
@@ -149,14 +177,17 @@ export const useSignInResponse = () => {
     credId: '',
   })
   const router = useRouter()
-  const confirmHandler = async (options: IRegisterOptions) => {
+  const confirmHandler = async (
+    options: IRegisterOptions,
+    username?: string
+  ) => {
     try {
       loading.value = true
       const {data: resultData} = await axios.post(
         '/auth/signinResponse',
         options
       )
-      localStorage.setItem('username', resultData.username)
+      localStorage.setItem('username', resultData.username || username)
       Object.assign(data, resultData)
       router.push('/home')
     } catch (e) {

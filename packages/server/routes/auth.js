@@ -65,8 +65,8 @@ router.delete('/:credId', sessionCheck, async (req, res) => {
 router.post('/registerRequest', sessionCheck, async (req, res) => {
     try {
         const RP_NAME = 'Web Authn Completed App';
-        const { username } = req.body;
-        const usernameRegex = new RegExp(/^[0-9a-zA-Z_]{4,8}$/);
+        const { username, isAndroid } = req.body;
+        const usernameRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/);
 
         if (!username || !usernameRegex.test(username)) {
             return res.status(400).send({
@@ -97,7 +97,7 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
             }
         }
 
-        const options = await fido2.generateRegistrationOptions({
+        const fido2Options = {
             rpName: RP_NAME,
             rpID: process.env.HOSTNAME,
             userID: userInfo[0].id,
@@ -105,7 +105,17 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
             attestationType: 'none',
             userVerification: 'required',
             excludeCredentials,
-        })
+        }
+
+        if (isAndroid) {
+            Object.assign(fido2Options, {
+                authenticatorSelection: {
+                    authenticatorAttachment: 'platform',
+                }
+            })
+        }
+
+        const options = await fido2.generateRegistrationOptions(fido2Options)
 
         req.session.challenge = options.challenge;
         res.status(200).send(options);
@@ -171,11 +181,54 @@ router.post('/registerResponse', sessionCheck, async (req, res) => {
 // sign in with auth request
 router.post('/signinRequest', async (req, res) => {
     try {
-        const options = await fido2.generateAuthenticationOptions({
-            allowCredentials: [],
+        const { username, credId, isAndroid } = req.query;
+        let allowCredentials = [];
+        const fido2Options = {};
+
+        if (isAndroid) {
+            const usernameRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/);
+            if (!username || !usernameRegex.test(username)) {
+                return res.status(400).send({
+                    code: 400,
+                    data: {},
+                    message: 'username is invalid',
+                })
+            }
+
+            const userInfo = await queryUsers({ username });
+            if (!userInfo.length) {
+                return res.status(400).send({
+                    code: 400,
+                    data: {},
+                    message: 'user not exist',
+                })
+            }
+
+            const authInfo = await queryAuths({ username });
+            for (const auth of authInfo) {
+                if (credId && auth.credId == credId) {
+                    allowCredentials.push({
+                        id: base64url.toBuffer(auth.credId),
+                        type: 'public-key',
+                        transports: ['internal']
+                    });
+                }
+            }
+
+            Object.assign(fido2Options, {
+                authenticatorSelection: {
+                    authenticatorAttachment: 'platform',
+                }
+            });
+        }
+
+        Object.assign(fido2Options, {
+            allowCredentials,
             attestationType: 'none',
             userVerification: 'required',
         });
+
+        const options = await fido2.generateAuthenticationOptions(fido2Options);
 
         req.session.challenge = options.challenge;
         res.status(200).send(options);

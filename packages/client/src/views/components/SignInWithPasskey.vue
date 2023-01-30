@@ -3,7 +3,7 @@
     <el-button
       type="primary"
       size="large"
-      :loading="signInRequestLoading || signInResponseLoading"
+      :loading="getAuthLoading || signInRequestLoading || signInResponseLoading"
       :disabled="!authAvailable"
       round
     >
@@ -16,8 +16,9 @@
 </template>
 
 <script lang="ts" setup>
-import {watch} from 'vue'
+import {watch, PropType} from 'vue'
 import {useSignInRequest, useSignInResponse} from '@/apis/useAuth'
+import {IAuthItem} from '@/interfaces/auth'
 
 const props = defineProps({
   buttonText: {
@@ -29,6 +30,18 @@ const props = defineProps({
     default: false,
   },
   clickType: {
+    type: String,
+    default: '',
+  },
+  authList: {
+    type: Array as PropType<IAuthItem[]>,
+    default: () => [],
+  },
+  getAuthLoading: {
+    type: Boolean,
+    default: false,
+  },
+  username: {
     type: String,
     default: '',
   },
@@ -49,9 +62,9 @@ const {
 } = useSignInResponse()
 
 const signInHandler = async () => {
-  await signInRequestHandler()
+  await signInRequestHandler(props.username || '')
   if (!signInRequestData?.id) return
-  await signInResponseHandler(signInRequestData)
+  await signInResponseHandler(signInRequestData, props.username || '')
   if (!signInResponseData?.credId) return
   emits('authSuccess')
 }
