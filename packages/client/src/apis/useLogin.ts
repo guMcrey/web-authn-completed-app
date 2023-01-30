@@ -13,7 +13,7 @@ export const useLoginUser = () => {
     try {
       loading.value = true
       const {data} = await axios.get(`/is-login`)
-      if (data.code === 200) {
+      if (data.code === 200 && ['/home', '/'].includes(router.options.history.location)) {
         router.push('/home')
       }
     } catch (err) {
