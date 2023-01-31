@@ -4,7 +4,6 @@
     <div class="page-container">
       <HomeHeader
         :username="username"
-        :authCount="authList?.length"
       ></HomeHeader>
       <InfoTip
         v-if="!isAuthenticatorAvailable"

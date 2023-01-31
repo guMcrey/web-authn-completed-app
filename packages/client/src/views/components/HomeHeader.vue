@@ -23,10 +23,6 @@ defineProps({
     type: String,
     default: '',
   },
-  authCount: {
-    type: Number,
-    default: 0,
-  },
 })
 </script>
 
@@ -43,7 +39,7 @@ defineProps({
   position relative
   margin 30px 0
   padding 2px
-  background linear-gradient(to right, rgba(233, 236, 247, 0.2) 0%, rgba(233, 236, 247, 0.8) 70%, rgba(233, 236, 247, 0.2) 100%)
+  background linear-gradient(to right, rgba(233, 236, 247, 0.2) 0%, rgba(233, 236, 247, 0.7) 70%, rgba(233, 236, 247, 0.2) 100%)
   border-radius 20px
 .card-title
   margin-left 20px
@@ -55,10 +51,16 @@ defineProps({
   margin 8px 0 0 20px
   font-size 14px
   color #909090
+  line-height 18px
 .card-icon
   position absolute
   top 8px
   left 10px
   width 22px
   height 22px
+@media screen and (max-width 1024px)
+  .card-title
+    font-size 16px
+  .card-subtitle
+    font-size 12px
 </style>

@@ -142,16 +142,17 @@ const resetHandler = () => {
 
 <style lang="stylus" scoped>
 .passkey-list
-  margin 20px 0
+  margin 30px 0
 .passkey-list-header
   display flex
   align-items center
   gap 12px
-  padding-bottom 15px
+  padding-bottom 18px
   border-bottom 1px solid #e5e5e5
 .passkey-list-header-title
   font-size 17px
   font-weight 600
+  line-height 24px
 .passkey-list-header-count
   font-size 15px
   font-weight 600
@@ -159,7 +160,7 @@ const resetHandler = () => {
   border-radius 38%
   border 1px solid #ddd
 .passkey-item
-  padding 12px 0
+  padding 15px 0
   display flex
   align-items flex-start
   justify-content space-between
@@ -176,9 +177,9 @@ const resetHandler = () => {
   gap 10px
   color #606060
 .item-public-key-id
-  margin-top 13px
+  margin-top 8px
   font-size 15px
-  color #606060
+  color #909090
   display flex
   align-items center
   gap 10px
@@ -190,11 +191,17 @@ const resetHandler = () => {
   align-items center
   gap 10px
 .add-key-btn
-  margin 15px 0
+  margin 18px 0
 .identify-icon
   width 16px
 .detail-text
   overflow hidden
   text-overflow ellipsis
   white-space nowrap
+@media screen and (max-width 1024px)
+  .item-public-key-id, .item-public-key-create-time
+    font-size 13px
+  .passkey-list-header-title
+    font-size 15px
+    color #333
 </style>
