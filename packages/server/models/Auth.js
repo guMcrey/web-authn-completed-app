@@ -3,7 +3,7 @@ const SqlString = require('sqlstring');
 
 const Auth = {
     selectAllAuth: async () => {
-        const sql = SqlString.format('SELECT * FROM credential');
+        const sql = SqlString.format('SELECT * FROM credential ORDER BY createTime DESC');
         const credentials = await query(sql);
         return credentials;
     },
@@ -28,6 +28,8 @@ const Auth = {
             }
             sql += ` deviceName = '${deviceName}'`;
         }
+        sql += ` ORDER BY createTime DESC`;
+        
         const credentials = await query(SqlString.format(sql));
         return credentials;
     },
