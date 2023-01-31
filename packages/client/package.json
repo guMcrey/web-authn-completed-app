@@ -11,7 +11,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
     "@simplewebauthn/browser": "^6.2.2",
-    "axios": "^1.2.0",
+    "axios": "^1.2.6",
     "element-plus": "^2.2.22",
     "vue": "^3.2.41",
     "vue-router": "^4.1.6"

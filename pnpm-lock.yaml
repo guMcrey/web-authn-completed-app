@@ -11,7 +11,7 @@ importers:
       '@simplewebauthn/browser': ^6.2.2
       '@types/node': ^18.11.9
       '@vitejs/plugin-vue': ^3.2.0
-      axios: ^1.2.0
+      axios: ^1.2.6
       element-plus: ^2.2.22
       stylus: ^0.59.0
       typescript: ^4.9.3
@@ -24,7 +24,7 @@ importers:
     dependencies:
       '@element-plus/icons-vue': 2.0.10_vue@3.2.45
       '@simplewebauthn/browser': 6.2.2
-      axios: 1.2.0
+      axios: 1.2.6
       element-plus: 2.2.22_vue@3.2.45
       vue: 3.2.45
       vue-router: 4.1.6_vue@3.2.45
@@ -464,8 +464,8 @@ packages:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: false
 
-  /axios/1.2.0:
-    resolution: {integrity: sha512-zT7wZyNYu3N5Bu0wuZ6QccIf93Qk1eV8LOewxgjOZFd2DenOs98cJ7+Y6703d0wkaXGY6/nZd4EweJaHz9uzQw==}
+  /axios/1.2.6:
+    resolution: {integrity: sha512-rC/7F08XxZwjMV4iuWv+JpD3E0Ksqg9nac4IIg6RwNuF0JTeWoCo/mBNG54+tNhhI11G3/VDRbdDQTs9hGp4pQ==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0

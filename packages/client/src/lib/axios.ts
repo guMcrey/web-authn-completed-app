@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import _Vue from 'vue'
 
 export interface IAxiosResponse<T> extends AxiosResponse {
@@ -12,7 +12,7 @@ const instance = axios.create({
   timeout: 60000,
 })
 
-const requestInterceptor = (config: AxiosRequestConfig) => {
+const requestInterceptor = (config: InternalAxiosRequestConfig) => {
   return config
 }
 
