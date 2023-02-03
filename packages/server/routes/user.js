@@ -29,6 +29,20 @@ router.get('/', async (req, res) => {
   }
 });
 
+// get latest user and all user count
+router.get('/latest-and-count', async (req, res) => {
+  try {
+    const result = await queryUsers({ query: 'all' });
+    res.status(200).send({
+      latestUser: result[0]?.username || '',
+      count: result.length,
+    });
+  } catch (err) {
+    Object.assign(errorObj, { message: err });
+    res.status(500).send(errorObj)
+  }
+});
+
 // create user
 router.post('/', async (req, res) => {
   try {

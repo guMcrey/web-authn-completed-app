@@ -22,3 +22,22 @@ export const useGetUser = () => {
 
   return {data, loading, fetchData}
 }
+
+// get all user list
+export const useGetLatestUserAndUserCount = () => {
+  const data: any = reactive({})
+  const loading = ref(false)
+  const fetchData = async () => {
+    try {
+      loading.value = true
+      const {data: result} = await axios.get(`/user/latest-and-count`)
+      Object.assign(data, result)
+    } catch (e) {
+      handleError(e)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {data, loading, fetchData}
+}
