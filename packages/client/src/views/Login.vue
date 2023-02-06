@@ -144,9 +144,9 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 .page-container-wrapper
-  margin-top 51px
+  margin-top 73px
   position relative
-  min-height calc(100vh - 51px)
+  min-height calc(100vh - 73px)
   display flex
   align-items center
   justify-content center

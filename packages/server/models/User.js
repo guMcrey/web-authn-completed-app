@@ -3,7 +3,7 @@ const SqlString = require('sqlstring');
 
 const User = {
     selectAllUsers: async () => {
-        const sql = SqlString.format('SELECT * FROM user');
+        const sql = SqlString.format('SELECT * FROM user ORDER BY createTime DESC');
         const users = await query(sql);
         return users;
     },

@@ -190,7 +190,7 @@ export const useSignInResponse = () => {
       localStorage.setItem('username', resultData.username || username)
       Object.assign(data, resultData)
       window.scrollTo(0, 0)
-      router.push('/home')
+      router.push('/example/home')
     } catch (e) {
       const errorCode = (e as any)?.code
       if (errorCode === 404) {
