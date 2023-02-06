@@ -1,4 +1,5 @@
 <template>
+  <Nav />
   <div v-loading="loading"></div>
 </template>
 

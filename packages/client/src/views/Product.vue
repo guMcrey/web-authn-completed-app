@@ -29,4 +29,13 @@ import ProductIntroduction from './components/ProductIntroduction.vue'
     background-position top right
     background-size contain
     background-repeat no-repeat
+@media screen and (max-width 1024px)
+  .product-info
+    min-height 100%
+    padding 0 27px
+    margin-top 100px;
+    display flex
+    align-items flex-start
+    &:after
+      display none
 </style>

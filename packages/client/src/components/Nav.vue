@@ -88,6 +88,7 @@ const handleClose = () => {
   left 0
   z-index 1
 .nav-border
+  background-color #fff
   border-bottom 1px solid #dcdfe6
 .nav-wrapper-left
   display flex
@@ -131,4 +132,11 @@ const handleClose = () => {
     transform scale(1.1)
     transition all 0.3s ease-out
     cursor pointer
+@media screen and (max-width 1024px)
+  .nav-wrapper
+    padding 15px 27px
+    border-bottom 1px solid #dcdfe6
+    background-color #fff
+  .nav-item
+    display none
 </style>

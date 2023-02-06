@@ -11,10 +11,18 @@
         sensor; and provide users with a more secure and easy login experience.
       </div>
       <div class="page-buttons">
-        <el-button type="primary" size="large" :icon="Monitor" @click="tryDemo">
+        <el-button
+          type="primary"
+          :size="clientType() === 'PC' ? 'large' : 'default'"
+          :icon="Monitor"
+          @click="tryDemo"
+        >
           Try the Demo
         </el-button>
-        <el-button size="large" @click="viewGithub">
+        <el-button
+          :size="clientType() === 'PC' ? 'large' : 'default'"
+          @click="viewGithub"
+        >
           <template #icon>
             <img
               class="github-icon"
@@ -73,6 +81,7 @@ import {onMounted} from 'vue'
 import {Monitor} from '@element-plus/icons-vue'
 import {useGetLatestUserAndUserCount} from '@/apis/useUser'
 import {useRouter} from 'vue-router'
+import {clientType} from '@/lib/functions'
 
 const router = useRouter()
 
@@ -88,7 +97,6 @@ const viewGithub = () => {
 
 onMounted(() => {
   fetchData()
-  console.log('data', data)
 })
 </script>
 
@@ -161,4 +169,46 @@ onMounted(() => {
       max-height 24px
 :deep(.el-button)
   font-size 17px
+@media screen and (max-width 1024px)
+  .product-introduction-page
+    position relative
+    display flex
+    flex-direction column
+  .page-left
+    max-width 100%
+  .page-title
+    font-size 36px
+  .page-subtitle
+    margin-top 25px
+    font-size 17px
+  .page-buttons
+    margin-top 25px
+    width 100%
+    display flex
+    align-items center
+  .page-users
+    margin-top 45px
+    margin-left 0
+    .users-avatar
+      display none
+    .users-title
+      flex-wrap wrap
+  .page-working-best
+    margin-bottom 30px
+    .working-best-list
+      display flex
+      align-items flex-start
+      flex-direction column
+    .working-best-item
+      display flex
+      align-items center
+      gap 8px
+      font-size 16px
+      img
+        max-width 24px
+        max-height 24px
+  .page-right
+    display none
+  :deep(.el-button)
+    font-size 16px
 </style>
