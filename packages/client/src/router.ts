@@ -10,13 +10,19 @@ export const router = createRouter({
         import(/* webpackChunkName: "product" */ '@/views/Product.vue'),
     },
     {
-      path: '/login',
+      path: '/example',
+      name: 'Example',
+      component: () =>
+        import(/* webpackChunkName: "example" */ '@/views/Example.vue'),
+    },
+    {
+      path: '/example/login',
       name: 'Login',
       component: () =>
         import(/* webpackChunkName: "login" */ '@/views/Login.vue'),
     },
     {
-      path: '/home',
+      path: '/example/home',
       name: 'Home',
       component: () =>
         import(/* webpackChunkName: "home" */ '@/views/Home.vue'),

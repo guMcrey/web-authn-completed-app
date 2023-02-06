@@ -1,21 +1,19 @@
 <template>
-  <Nav></Nav>
+  <Nav />
   <div class="product-info">
     <ProductIntroduction />
   </div>
 </template>
 
 <script lang="ts" setup>
-import Nav from './components/Nav.vue'
 import ProductIntroduction from './components/ProductIntroduction.vue'
 </script>
 
 <style lang="stylus" scoped>
 .product-info
-  // TODO: 考虑
-  // position relative
+  margin-top 73px
+  min-height calc(100vh - 73px)
   padding 0 10%
-  height calc(100vh - 73px)
   display flex
   align-items center
   background-color #fff
@@ -30,5 +28,5 @@ import ProductIntroduction from './components/ProductIntroduction.vue'
     background-image url('@/assets/images/product-bg.svg')
     background-position top right
     background-size contain
-    background-repeat no-repeat;
+    background-repeat no-repeat
 </style>

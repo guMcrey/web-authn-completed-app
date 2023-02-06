@@ -2,9 +2,7 @@
   <Nav />
   <div class="page-container-wrapper">
     <div class="page-container">
-      <HomeHeader
-        :username="username"
-      ></HomeHeader>
+      <HomeHeader :username="username"></HomeHeader>
       <InfoTip
         v-if="!isAuthenticatorAvailable"
         content="This device or browser does not support User Verifying Platform Authenticator. You can't add a WebAuthn device."
@@ -26,6 +24,9 @@ import {useRouter} from 'vue-router'
 import HomeHeader from './components/HomeHeader.vue'
 import PasskeyList from './components/PasskeyList.vue'
 import {useGetAuthByUsername} from '@/apis/useAuth'
+import {useLoginUser} from '@/apis/useLogin'
+
+const {fetchData} = useLoginUser()
 
 const {
   data: authList,
@@ -53,6 +54,7 @@ const username = computed(() => {
 })
 
 onMounted(async () => {
+  fetchData()
   if (!username.value) return
   await authenticatorAvailable()
   await fetchAuthByUsername(username.value)
@@ -61,9 +63,9 @@ onMounted(async () => {
 
 <style lang="stylus" scoped>
 .page-container-wrapper
-  margin-top 51px
+  margin-top 73px
   position relative
-  min-height calc(100vh - 51px)
+  min-height calc(100vh - 73px)
   display flex
   justify-content center
   background-color #fff

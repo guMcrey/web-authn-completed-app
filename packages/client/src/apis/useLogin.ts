@@ -13,12 +13,17 @@ export const useLoginUser = () => {
     try {
       loading.value = true
       const {data} = await axios.get(`/is-login`)
-      if (data.code === 200 && ['/home', '/'].includes(router.options.history.location)) {
+      if (
+        data.code === 200 &&
+        ['/example/login', '/example/home', '/example'].includes(
+          router.options.history.location
+        )
+      ) {
         window.scrollTo(0, 0)
-        router.push('/home')
+        router.push('/example/home')
       }
     } catch (err) {
-      router.push('/')
+      router.push('/example/login')
     } finally {
       loading.value = false
     }
@@ -38,7 +43,7 @@ export const useLogin = () => {
       await axios.post(`/login`, {username, password})
       ElMessage.success('Login successful.')
       window.scrollTo(0, 0)
-      router.push('/home')
+      router.push('/example/home')
       localStorage.setItem('username', username)
     } catch (e) {
       handleError(e)
@@ -59,7 +64,7 @@ export const useLogout = () => {
     try {
       loading.value = true
       await axios.get(`/logout`)
-      router.replace('/')
+      router.replace('/example')
     } catch (e) {
       handleError(e)
     } finally {

@@ -3,16 +3,18 @@
     <div class="page-left">
       <div class="page-title">WebAuthn Completed App</div>
       <div class="page-subtitle">
-        A passkey is a new way to sign in that works completely without
-        passwords. By using the security capabilities of your devices like Touch
-        ID and Face ID, passkeys are way more secure and are easier to use than
-        both passwords and all current 2-factor authentication methods.
+        A complete application based on
+        <el-link href="https://simplewebauthn.dev/docs">SimpleWebAuthn</el-link
+        >. It is a new way to sign in that works completely without passwords,
+        it allows websites to authenticate users using built-in authenticators
+        such as Apple TouchID and Windows Hello or mobile device biometric
+        sensor; and provide users with a more secure and easy login experience.
       </div>
       <div class="page-buttons">
-        <el-button type="primary" size="large" :icon="Monitor">
+        <el-button type="primary" size="large" :icon="Monitor" @click="tryDemo">
           Try the Demo
         </el-button>
-        <el-button size="large">
+        <el-button size="large" @click="viewGithub">
           <template #icon>
             <img
               class="github-icon"
@@ -60,18 +62,29 @@
         </ul>
       </div>
     </div>
-    <div class="page-right">
+    <div class="page-right" @click="tryDemo">
       <img src="@/assets/images/preview.gif" alt="preview" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import {onMounted} from 'vue'
 import {Monitor} from '@element-plus/icons-vue'
 import {useGetLatestUserAndUserCount} from '@/apis/useUser'
-import {onMounted} from 'vue'
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
 
 const {data, loading, fetchData} = useGetLatestUserAndUserCount()
+
+const tryDemo = () => {
+  router.push('/example')
+}
+
+const viewGithub = () => {
+  window.open('https://github.com/guMcrey/web-authn-completed-app')
+}
 
 onMounted(() => {
   fetchData()
@@ -83,7 +96,7 @@ onMounted(() => {
 .product-introduction-page
   position relative
   display flex
-  align-items center
+  align-items flex-start
   justify-content space-between
   gap 60px
 .page-left
@@ -103,12 +116,14 @@ onMounted(() => {
 .page-right
   position relative
   z-index 1
-  max-width: 25%;
-  filter: drop-shadow(1px 2px 30px rgba(15,27,41,.35));
+  max-width 25%
+  filter drop-shadow(1px 2px 30px rgba(15,27,41,.35))
   img
     max-width 100%
     max-height 100%
     border-radius 12px
+  &:hover
+    cursor pointer
 .page-users
   margin-top 75px
   margin-left 12px
