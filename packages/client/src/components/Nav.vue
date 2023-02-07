@@ -86,7 +86,7 @@ const handleClose = () => {
   top 0
   right 0
   left 0
-  z-index 1
+  z-index 99
 .nav-border
   background-color #fff
   border-bottom 1px solid #dcdfe6
@@ -117,8 +117,6 @@ const handleClose = () => {
     max-width 100%
     max-height 100%
 .nav-wrapper-right
-  position relative
-  z-index 3
   display flex
   align-items center
   gap 30px
