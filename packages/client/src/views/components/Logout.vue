@@ -7,16 +7,19 @@
     size="large"
     @click="clickLogoutHandler"
   >
-    Logout
+    {{ t('home.logout') }}
   </el-button>
 </template>
 
 <script lang="ts" setup>
-import { Unlock } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus'
-import { useLogout } from '@/apis/useLogin'
+import {Unlock} from '@element-plus/icons-vue'
+import {ElMessageBox} from 'element-plus'
+import {useLogout} from '@/apis/useLogin'
+import {useI18n} from 'vue-i18n'
 
-const { loading, logoutHandler } = useLogout()
+const {t} = useI18n()
+
+const {loading, logoutHandler} = useLogout()
 
 const clickLogoutHandler = () => {
   ElMessageBox.confirm('Confirm to logout?', 'Tips', {

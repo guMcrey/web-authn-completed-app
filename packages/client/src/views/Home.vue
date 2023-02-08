@@ -5,7 +5,7 @@
       <HomeHeader :username="username"></HomeHeader>
       <InfoTip
         v-if="!isAuthenticatorAvailable"
-        content="This device or browser does not support User Verifying Platform Authenticator. You can't add a WebAuthn device."
+        :content="`${t('home.noSupport')}${t('home.noAdd')}`"
       />
       <PasskeyList
         v-if="isAuthenticatorAvailable"
@@ -25,7 +25,9 @@ import HomeHeader from './components/HomeHeader.vue'
 import PasskeyList from './components/PasskeyList.vue'
 import {useGetAuthByUsername} from '@/apis/useAuth'
 import {useLoginUser} from '@/apis/useLogin'
+import {useI18n} from 'vue-i18n'
 
+const {t} = useI18n()
 const {fetchData} = useLoginUser()
 
 const {

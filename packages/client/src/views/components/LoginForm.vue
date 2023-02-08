@@ -7,20 +7,20 @@
     label-position="top"
     @submit.prevent
   >
-    <el-form-item label="Username" required prop="username">
+    <el-form-item :label="t('login.username')" required prop="username">
       <el-input
         v-model="form.username"
-        placeholder="Enter your username"
+        :placeholder="t('login.usernamePlaceholder')"
         :prefix-icon="User"
         size="large"
       ></el-input>
     </el-form-item>
-    <el-form-item label="Password" required prop="password">
+    <el-form-item :label="t('login.password')" required prop="password">
       <el-input
         v-model="form.password"
         type="password"
         size="large"
-        placeholder="Enter your password"
+        :placeholder="t('login.passwordPlaceholder')"
         :prefix-icon="Lock"
         show-password
         @keyup.enter.native="signInHandler"
@@ -34,7 +34,7 @@
         size="large"
         @click="signInHandler"
       >
-        Sign in
+        {{ t('login.signIn') }}
       </el-button>
     </div>
   </el-form>
@@ -45,28 +45,22 @@ import {ref, reactive} from 'vue'
 import {User, Lock} from '@element-plus/icons-vue'
 import type {FormInstance, FormRules} from 'element-plus'
 import {useLogin} from '@/apis/useLogin'
+import {useI18n} from 'vue-i18n'
 
+const {t} = useI18n()
 const {loading: loginLoading, fetchData: loginHandler} = useLogin()
 
 const validateUsername = (rule: any, value: any, callback: any) => {
   const regex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/)
   if (!regex.test(value)) {
-    return callback(
-      new Error(
-        'Please enter 4-8 characters starting with a letter and consisting of letters, numbers and underscores.'
-      )
-    )
+    return callback(new Error(t('login.usernameValidate')))
   }
   callback()
 }
 const validatePassword = (rule: any, value: any, callback: any) => {
   const regex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{5,9}$/)
   if (!regex.test(value)) {
-    return callback(
-      new Error(
-        'Please enter 6-10 characters starting with a letter and consisting of letters, numbers and underscores.'
-      )
-    )
+    return callback(new Error(t('login.passwordValidate')))
   }
   callback()
 }
@@ -79,7 +73,7 @@ const formRule = reactive<FormRules>({
   username: [
     {
       required: true,
-      message: 'Username is required',
+      message: t('login.usernameRequired'),
       trigger: ['blur', 'change'],
     },
     {
@@ -89,7 +83,7 @@ const formRule = reactive<FormRules>({
   password: [
     {
       required: true,
-      message: 'Password is required',
+      message: t('login.passwordRequired'),
       trigger: ['blur', 'change'],
     },
     {

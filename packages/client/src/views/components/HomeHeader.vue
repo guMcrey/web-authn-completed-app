@@ -1,15 +1,12 @@
 <template>
   <div>
     <div class="container-header">
-      <div class="container-title">Hello, {{ username }}</div>
+      <div class="container-title">{{ t('home.hello') }}, {{ username }}</div>
       <Logout />
     </div>
     <el-card class="passkey-card">
-      <div class="card-title">Passwordless Authentication</div>
-      <div class="card-subtitle">
-        Follow the <strong>FIDO2</strong> standard to set up your account for
-        passwordless authentication.
-      </div>
+      <div class="card-title">{{ t('home.cardTitle') }}</div>
+      <div class="card-subtitle" v-html="t('home.cardSubtitle')"></div>
       <img class="card-icon" src="@/assets/images/focus.jpg" alt="focus" />
     </el-card>
   </div>
@@ -17,6 +14,9 @@
 
 <script lang="ts" setup>
 import Logout from './Logout.vue'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 defineProps({
   username: {

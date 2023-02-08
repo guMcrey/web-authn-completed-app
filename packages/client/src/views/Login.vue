@@ -9,7 +9,7 @@
         />
       </div>
       <div class="container-content">
-        <div class="content-title">Sign in</div>
+        <div class="content-title">{{ t('login.signIn') }}</div>
         <div class="content-detail">
           <SignInWithPasskey
             :username="username || usernameInput"
@@ -22,13 +22,12 @@
             @authSuccess="authSuccessCallback"
           />
           <InfoTip v-if="!isAuthenticatorAvailable" />
-          <div class="or-title">or</div>
+          <div class="or-title">{{ t('login.or') }}</div>
           <LoginForm />
         </div>
       </div>
       <div class="tips-text">
-        If the username does not exist, it will automatically register the user
-        for you.
+        {{ t('login.tips') }}
       </div>
     </div>
   </div>
@@ -42,6 +41,9 @@ import {ElMessageBox, ElMessage} from 'element-plus'
 import 'element-plus/es/components/message-box/style/css'
 import {useGetAuthByUsername} from '@/apis/useAuth'
 import {clientType} from '@/lib/functions'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 const {
   data: authList,

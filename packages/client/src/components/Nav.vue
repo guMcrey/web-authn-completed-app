@@ -15,7 +15,7 @@
           :class="
             route.path === '/' ? 'nav-item-title active' : 'nav-item-title'
           "
-          >Product</span
+          >{{ t('nav.product') }}</span
         >
       </li>
       <li class="nav-item" @click="router.push('/example')">
@@ -27,25 +27,51 @@
               ? 'nav-item-title active'
               : 'nav-item-title'
           "
-          >Example</span
+          >{{ t('nav.example') }}</span
         >
       </li>
     </ul>
     <ul class="nav-wrapper-right">
-      <el-tooltip content="User Guide" placement="bottom">
-        <li class="right-icon" @click="viewGuide">
+      <el-tooltip :content="t('nav.userGuide')" placement="bottom">
+        <li class="right-icon scale" @click="viewGuide">
           <img src="@/assets/images/guide.svg" alt="guide" />
         </li>
       </el-tooltip>
-      <el-tooltip content="Github" placement="bottom">
-        <li class="right-icon" @click="viewGithub">
+      <el-tooltip :content="t('nav.github')" placement="bottom">
+        <li class="right-icon scale" @click="viewGithub">
           <img src="@/assets/images/github.svg" alt="github" />
         </li>
       </el-tooltip>
+      <li class="right-icon">
+        <el-dropdown size="large" @command="handleCommand">
+          <span class="el-dropdown-wrap">
+            <img src="@/assets/images/language.svg" alt="language" />
+            <el-icon color="#000">
+              <arrow-down />
+            </el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                :style="locale === 'en' && 'color: #409eff; font-weight: 600;'"
+                command="en"
+                >🇺🇸 English</el-dropdown-item
+              >
+              <el-dropdown-item
+                :style="
+                  locale === 'zh-cn' && 'color: #409eff; font-weight: 600;'
+                "
+                command="zh-cn"
+                >🇨🇳 简体中文</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </li>
     </ul>
     <el-dialog
       v-model="openGuideVisible"
-      title="User Guide"
+      :title="t('nav.userGuide')"
       width="50%"
       :before-close="handleClose"
     >
@@ -56,9 +82,12 @@
 
 <script lang="ts" setup>
 import {ref} from 'vue'
+import {ArrowDown} from '@element-plus/icons-vue'
 import {useRoute, useRouter} from 'vue-router'
 import UserGuideContent from '@/components/UserGuideContent.vue'
+import {useI18n} from 'vue-i18n'
 
+const {t, locale} = useI18n({useScope: 'global'})
 const openGuideVisible = ref(false)
 const route = useRoute()
 const router = useRouter()
@@ -73,6 +102,11 @@ const viewGuide = () => {
 
 const handleClose = () => {
   openGuideVisible.value = false
+}
+
+const handleCommand = (language: string) => {
+  locale.value = language
+  localStorage.setItem('locale', language)
 }
 </script>
 
@@ -126,10 +160,14 @@ const handleClose = () => {
   img
     max-width 100%
     max-height 100%
+.scale
   &:hover
     transform scale(1.1)
     transition all 0.3s ease-out
     cursor pointer
+.el-dropdown-wrap
+  display flex
+  align-items center
 @media screen and (max-width 1024px)
   .nav-wrapper
     padding 15px 27px

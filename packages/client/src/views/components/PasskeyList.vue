@@ -2,7 +2,7 @@
   <div class="passkey-list">
     <div class="passkey-list-header">
       <div class="passkey-list-header-title">
-        The following devices are configured for your account
+        {{ t('home.deviceTitle') }}
       </div>
       <div v-show="authList.length" class="passkey-list-header-count">
         {{ authList.length }}
@@ -20,20 +20,20 @@
       <template #icon>
         <img class="identify-icon" src="@/assets/images/identify-icon.svg" />
       </template>
-      Add WebAuthn Device
+      {{ t('home.addDeviceBtn') }}
     </el-button>
     <template v-if="authList.length">
       <div v-for="item in authList" class="passkey-item">
         <div class="item-detail">
           <div class="item-public-key-device">
-            <el-icon><Monitor /></el-icon> 
+            <el-icon><Monitor /></el-icon>
             <span class="detail-text">
               {{ item.deviceName || '-' }}
             </span>
           </div>
           <div class="item-public-key-id">
             <el-icon><Key /></el-icon>
-            <span class="detail-text">{{ item.publicKey || '-' }}</span> 
+            <span class="detail-text">{{ item.publicKey || '-' }}</span>
           </div>
           <div class="item-public-key-create-time">
             <el-icon><Timer /></el-icon>
@@ -54,7 +54,7 @@
     <el-empty
       v-if="!authList.length"
       :image-size="100"
-      description="No devices are configured."
+      :description="t('home.noData')"
     ></el-empty>
   </div>
 </template>
@@ -71,6 +71,9 @@ import {
   useDeleteAuth,
 } from '@/apis/useAuth'
 import {formatDate} from '@/lib/functions'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 const {
   data: registerRequestData,

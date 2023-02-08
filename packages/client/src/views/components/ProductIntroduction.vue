@@ -1,14 +1,11 @@
 <template>
   <div class="product-introduction-page">
     <div class="page-left">
-      <div class="page-title">WebAuthn Completed App</div>
+      <div class="page-title">{{ t('product.title') }}</div>
       <div class="page-subtitle">
-        A complete application based on
+        {{ t('product.subtitle1') }}
         <el-link href="https://simplewebauthn.dev/docs">SimpleWebAuthn</el-link
-        >. It is a new way to sign in that works completely without passwords,
-        it allows websites to authenticate users using built-in authenticators
-        such as Apple TouchID and Windows Hello or mobile device biometric
-        sensor; and provide users with a more secure and easy login experience.
+        >. {{ t('product.subtitle2') }}
       </div>
       <div class="page-buttons">
         <el-button
@@ -17,7 +14,7 @@
           :icon="Monitor"
           @click="tryDemo"
         >
-          Try the Demo
+          {{ t('product.tryDemo') }}
         </el-button>
         <el-button
           :size="clientType() === 'PC' ? 'large' : 'default'"
@@ -30,7 +27,7 @@
               alt="github"
             />
           </template>
-          View on Github
+          {{ t('product.viewGithub') }}
         </el-button>
       </div>
       <div class="page-users">
@@ -41,14 +38,14 @@
             src="@/assets/images/avatar.svg"
             alt="avatar"
           />
-          {{ data.latestUser }} and
-          <strong v-loading="loading">{{ data.count }}</strong> users have
-          experienced it
+          {{ data.latestUser }} {{ t('product.and') }}
+          <strong v-loading="loading">{{ data.count }}</strong>
+          {{ t('product.users') }}
         </div>
       </div>
       <div class="page-working-best">
         <div class="working-best-title">
-          Working with the best
+          {{ t('product.workBestTitle') }}
         </div>
         <ul class="working-best-list">
           <li class="working-best-item">
@@ -82,7 +79,9 @@ import {Monitor} from '@element-plus/icons-vue'
 import {useGetLatestUserAndUserCount} from '@/apis/useUser'
 import {useRouter} from 'vue-router'
 import {clientType} from '@/lib/functions'
+import {useI18n} from 'vue-i18n'
 
+const {t} = useI18n()
 const router = useRouter()
 
 const {data, loading, fetchData} = useGetLatestUserAndUserCount()
