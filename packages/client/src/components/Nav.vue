@@ -81,11 +81,20 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import {ArrowDown} from '@element-plus/icons-vue'
 import {useRoute, useRouter} from 'vue-router'
 import UserGuideContent from '@/components/UserGuideContent.vue'
 import {useI18n} from 'vue-i18n'
+
+const props = defineProps({
+  showUserGuide: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+const emits = defineEmits(['closeUserGuide'])
 
 const {t, locale} = useI18n({useScope: 'global'})
 const openGuideVisible = ref(false)
@@ -102,12 +111,23 @@ const viewGuide = () => {
 
 const handleClose = () => {
   openGuideVisible.value = false
+  emits('closeUserGuide')
 }
 
 const handleCommand = (language: string) => {
   locale.value = language
   localStorage.setItem('locale', language)
 }
+
+watch(
+  () => props.showUserGuide,
+  () => {
+    if (props.showUserGuide) {
+      openGuideVisible.value = true
+    }
+  },
+  {immediate: true}
+)
 </script>
 
 <style lang="stylus" scoped>

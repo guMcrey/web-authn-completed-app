@@ -2,10 +2,10 @@
   <div class="product-introduction-page">
     <div class="page-left">
       <div class="page-title">{{ t('product.title') }}</div>
-      <div class="page-subtitle">
+      <div :class="locale === 'en' ? 'page-subtitle' : 'page-subtitle-zh'">
         {{ t('product.subtitle1') }}
-        <el-link href="https://simplewebauthn.dev/docs">SimpleWebAuthn</el-link
-        >. {{ t('product.subtitle2') }}
+        <el-link href="https://simplewebauthn.dev/docs">SimpleWebAuthn</el-link>
+        {{ t('product.subtitle2') }}
       </div>
       <div class="page-buttons">
         <el-button
@@ -81,7 +81,7 @@ import {useRouter} from 'vue-router'
 import {clientType} from '@/lib/functions'
 import {useI18n} from 'vue-i18n'
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 const router = useRouter()
 
 const {data, loading, fetchData} = useGetLatestUserAndUserCount()
@@ -112,10 +112,16 @@ onMounted(() => {
   font-size 42px
   font-weight bold
   line-height 45px
+.page-subtitle-zh
+  margin-top 35px
+  font-size 16px
+  line-height 34px
+  color #2c2c2c
 .page-subtitle
   margin-top 35px
   font-size 18px
-  line-height 30px
+  line-height 32px
+  color #333
 .page-buttons
   margin-top 35px
 .github-icon

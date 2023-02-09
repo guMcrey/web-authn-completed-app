@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container-header">
-      <div class="container-title">{{ t('home.hello') }}, {{ username }}</div>
+      <div class="container-title">{{ t('home.hello') }}{{ username }}</div>
       <Logout />
     </div>
     <el-card class="passkey-card">
@@ -52,7 +52,7 @@ defineProps({
   color #2b97ec
   font-style italic
 .card-subtitle
-  margin 8px 0 0 20px
+  margin 12px 0 0 20px
   font-size 14px
   color #909090
   line-height 18px

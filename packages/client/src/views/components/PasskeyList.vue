@@ -1,7 +1,13 @@
 <template>
   <div class="passkey-list">
     <div class="passkey-list-header">
-      <div class="passkey-list-header-title">
+      <div
+        :class="
+          locale === 'en'
+            ? 'passkey-list-header-title'
+            : 'passkey-list-header-title-zh'
+        "
+      >
         {{ t('home.deviceTitle') }}
       </div>
       <div v-show="authList.length" class="passkey-list-header-count">
@@ -73,7 +79,7 @@ import {
 import {formatDate} from '@/lib/functions'
 import {useI18n} from 'vue-i18n'
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 
 const {
   data: registerRequestData,
@@ -152,6 +158,11 @@ const resetHandler = () => {
   font-size 17px
   font-weight 600
   line-height 24px
+.passkey-list-header-title-zh
+  font-size 15px
+  font-weight 600
+  line-height 24px
+  color #555
 .passkey-list-header-count
   font-size 15px
   font-weight 600

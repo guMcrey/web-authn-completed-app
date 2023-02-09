@@ -4,6 +4,7 @@ export default {
     example: 'Example',
     github: 'Github',
     userGuide: 'User Guide',
+    deviceType: 'Device Type',
   },
   product: {
     title: 'WebAuthn Completed App',
@@ -17,6 +18,8 @@ export default {
     workBestTitle: 'Working with the best',
   },
   login: {
+    howToUse: 'How to use the demo?',
+    learnMore: 'Learn More',
     signIn: 'Sign in',
     signInWithPasskey: 'Sign in with passkey',
     or: 'or',
@@ -28,9 +31,10 @@ export default {
     password: 'Password',
     passwordPlaceholder: 'Enter your password',
     passwordRequired: 'Password is required',
-    passwordValidate: '请输入 6-10 位以字母开头, 由字母、数字、下划线组成',
-    tips:
+    passwordValidate:
       'Please enter 6-10 characters starting with a letter and consisting of letters, numbers and underscores',
+    tips:
+      'Feel free to enter a username and password that matches the rules, we will register and log in for you',
     usernamePrompt:
       'Please enter the username of the WebAuthn device that has been added. If not, please log in with the username and password first.',
     noPasskey: 'No passkey',
@@ -38,7 +42,7 @@ export default {
       "You don't have a passkey yet. Please log in with the username and password first, and then try again after add the WebAuthn device.",
   },
   home: {
-    hello: 'Hello',
+    hello: 'Hello, ',
     cardTitle: 'Passwordless Authentication',
     cardSubtitle: 'Follow the',
     cardSubtitle2:

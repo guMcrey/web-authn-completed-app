@@ -1,5 +1,5 @@
 <template>
-  <Nav />
+  <Nav :showUserGuide="showUserGuide" @closeUserGuide="showUserGuide = false" />
   <div class="page-container-wrapper">
     <div class="page-container">
       <div class="container-header">
@@ -8,8 +8,16 @@
           alt="fido-passkey-image"
         />
       </div>
+      <div class="guide-tips">
+        {{ t('login.howToUse') }}
+        <span class="learn-more" @click="showUserGuide = true">{{
+          t('login.learnMore')
+        }}</span>
+      </div>
       <div class="container-content">
-        <div class="content-title">{{ t('login.signIn') }}</div>
+        <div :class="locale === 'en' ? 'content-title' : 'content-title-zh'">
+          {{ t('login.signIn') }}
+        </div>
         <div class="content-detail">
           <SignInWithPasskey
             :username="username || usernameInput"
@@ -43,7 +51,7 @@ import {useGetAuthByUsername} from '@/apis/useAuth'
 import {clientType} from '@/lib/functions'
 import {useI18n} from 'vue-i18n'
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 
 const {
   data: authList,
@@ -51,6 +59,7 @@ const {
   fetchData: fetchAuthByUsername,
 } = useGetAuthByUsername()
 
+const showUserGuide = ref(false)
 const isAuthenticatorAvailable = ref(false)
 const clickType = ref('')
 const usernameInput = ref('')
@@ -157,6 +166,15 @@ onMounted(() => {
     max-width 100%
     max-height 100%
     border-radius 100%
+.guide-tips
+  font-size 14px
+  margin-top 12px
+  text-align center
+  color #969696
+.learn-more
+  color #409eff
+  font-weight 500
+  cursor pointer
 .container-content
   flex 100%
   margin-top 40px
@@ -164,6 +182,10 @@ onMounted(() => {
 .content-title
   font-size 26px
   font-weight bold
+.content-title-zh
+  font-size 24px
+  font-weight 500
+  color #2c2c2c
 .content-detail
   margin 20px 0
   display flex
