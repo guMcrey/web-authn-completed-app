@@ -10,7 +10,7 @@
       <template #icon>
         <img class="identify-icon" src="@/assets/images/identify-icon.svg" />
       </template>
-      {{ buttonText }}
+      {{ t('login.signInWithPasskey') }}
     </el-button>
   </div>
 </template>
@@ -19,12 +19,11 @@
 import {watch, PropType} from 'vue'
 import {useSignInRequest, useSignInResponse} from '@/apis/useAuth'
 import {IAuthItem} from '@/interfaces/auth'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 const props = defineProps({
-  buttonText: {
-    type: String,
-    default: 'Sign in with passkey',
-  },
   authAvailable: {
     type: Boolean,
     default: false,

@@ -7,6 +7,7 @@ import {handleError} from '@/lib/errorHandler'
 import {startRegistration, startAuthentication} from '@simplewebauthn/browser'
 import {IAuthItem, IRegisterOptions} from '@/interfaces/auth'
 import {clientType} from '@/lib/functions'
+import {useI18n} from 'vue-i18n'
 
 const isAndroid = clientType() === 'Android' ? true : false
 
@@ -14,10 +15,12 @@ const isAndroid = clientType() === 'Android' ? true : false
 export const useGetAuthByUsername = () => {
   const data = ref<IAuthItem[]>([])
   const loading = ref(false)
+  const {locale} = useI18n()
+
   const fetchData = async (username: string) => {
     try {
       loading.value = true
-      const {data: result} = await axios.get(`/auth`, {
+      const {data: result} = await axios.get(`/auth?lang=${locale.value}`, {
         params: {username},
       })
       data.value = result
@@ -34,12 +37,14 @@ export const useGetAuthByUsername = () => {
 // delete auth by id
 export const useDeleteAuth = () => {
   const loading = ref(false)
+  const {t, locale} = useI18n()
+
   const deleteData = async (credId: string) => {
     try {
-      await axios.delete(`/auth/${credId}`)
+      await axios.delete(`/auth/${credId}?lang=${locale.value}`)
       ElMessage({
         type: 'success',
-        message: 'Delete completed',
+        message: t('message.deleteSuccess'),
       })
     } catch (e) {
       handleError(e)
@@ -66,13 +71,18 @@ export const useRegisterRequest = () => {
     type: 'public-key',
   })
   const loading = ref(false)
+  const {locale} = useI18n()
+
   const confirmHandler = async (username: string) => {
     try {
       loading.value = true
-      const {data: options} = await axios.post(`/auth/registerRequest`, {
-        username,
-        isAndroid,
-      })
+      const {data: options} = await axios.post(
+        `/auth/registerRequest?lang=${locale.value}`,
+        {
+          username,
+          isAndroid,
+        }
+      )
       const registerResult = await startRegistration(options)
       Object.assign(data, registerResult)
       localStorage.setItem(`credId`, registerResult.id)
@@ -96,13 +106,18 @@ export const useRegisterRequest = () => {
 // register auth response
 export const useRegisterResponse = () => {
   const loading = ref(false)
+  const {locale} = useI18n()
+
   const confirmHandler = async (
     username: string,
     options: IRegisterOptions
   ) => {
     try {
       loading.value = true
-      await axios.post(`/auth/registerResponse?username=${username}`, options)
+      await axios.post(
+        `/auth/registerResponse?username=${username}&lang=${locale.value}`,
+        options
+      )
     } catch (e) {
       handleError(e)
     } finally {
@@ -128,22 +143,25 @@ export const useSignInRequest = () => {
     type: 'public-key',
   })
   const loading = ref(false)
+  const {t, locale} = useI18n()
 
   const confirmHandler = async (username?: string) => {
     try {
       loading.value = true
       const opts = {}
       const credId = localStorage.getItem('credId') || ''
-      let postUrl = `/auth/signinRequest`
+      let postUrl = `/auth/signinRequest?lang=${locale.value}`
 
       if (isAndroid) {
         if (!credId) {
           ElMessageBox.alert(
-            '<p><strong>Please log in with username and password, then add the webAuthn device again.</strong></p><p>( Passkey is unavailable because data may not exist due to clearing cache )</p>',
-            'Passkey is not available',
+            `<p><strong>${t(
+              'message.passkeyNotAvailableSubtitle'
+            )}</strong></p><p>${t('message.passkeyNotAvailableNoCatch')}</p>`,
+            t('message.passkeyNotAvailableTitle'),
             {
               type: 'info',
-              confirmButtonText: 'OK',
+              confirmButtonText: t('message.confirmData'),
               dangerouslyUseHTMLString: true,
             }
           )
@@ -151,7 +169,7 @@ export const useSignInRequest = () => {
         }
         postUrl = `/auth/signinRequest?credId=${encodeURIComponent(
           credId
-        )}&username=${username}&isAndroid=${isAndroid}`
+        )}&username=${username}&isAndroid=${isAndroid}&lang=${locale.value}`
       }
 
       const {data: options} = await axios.post(postUrl, opts)
@@ -177,6 +195,8 @@ export const useSignInResponse = () => {
     credId: '',
   })
   const router = useRouter()
+  const {t, locale} = useI18n()
+
   const confirmHandler = async (
     options: IRegisterOptions,
     username?: string
@@ -184,7 +204,7 @@ export const useSignInResponse = () => {
     try {
       loading.value = true
       const {data: resultData} = await axios.post(
-        '/auth/signinResponse',
+        `/auth/signinResponse?lang=${locale.value}`,
         options
       )
       localStorage.setItem('username', resultData.username || username)
@@ -195,10 +215,10 @@ export const useSignInResponse = () => {
       const errorCode = (e as any)?.code
       if (errorCode === 404) {
         return ElMessageBox.alert(
-          'The public key associated with the user was not found. Unable to authenticate login now. Please log in with another method and register the passkey and try again.',
-          'No valid public key was matched',
+          t('message.noPublicKeyDescription'),
+          t('message.noPublicKey'),
           {
-            confirmButtonText: 'OK',
+            confirmButtonText: t('message.confirmData'),
           }
         )
       }

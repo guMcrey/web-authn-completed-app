@@ -12,12 +12,12 @@ const errorObj = {
 // get user list
 router.get('/', async (req, res) => {
   try {
-    const { query, id, username, password } = req.query;
+    const { query, id, username, password, lang } = req.query;
     if (!query && !id && !username && !password) {
       return res.status(400).send({
         code: 400,
         data: {},
-        message: 'select query field is required.'
+        message: lang === 'en' ? 'select query field is required.' : '搜索参数不能为空'
       })
     };
 
@@ -46,14 +46,14 @@ router.get('/latest-and-count', async (req, res) => {
 // create user
 router.post('/', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { lang, username, password } = req.body;
     const usernameRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/);
     const passwordRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{5,9}$/);
     if (!username || !password || !usernameRegex.test(username) || !passwordRegex.test(password)) {
       return res.status(400).send({
         code: 400,
         data: {},
-        message: 'username and password is invalid.'
+        message: lang === 'en' ? 'username or password is invalid.' : '用户名或密码格式有误'
       })
     }
 
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
       return res.status(400).send({
         code: 400,
         data: {},
-        message: 'username is exist, please use another one.'
+        message: lang === 'en' ? 'username is exist, please use another one.' : '用户名已存在, 请更改后再试'
       })
     }
 

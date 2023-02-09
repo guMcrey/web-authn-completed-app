@@ -15,12 +15,12 @@ const errorObj = {
 // get auth list
 router.get('/', async (req, res) => {
     try {
-        const { query, credId, username, deviceName } = req.query;
+        const { lang, query, credId, username, deviceName } = req.query;
         if (!query && !username && !deviceName) {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'select query is required.'
+                message: lang === 'en' ? 'select query is required.' : '查询参数不能为空'
             })
         }
 
@@ -35,12 +35,13 @@ router.get('/', async (req, res) => {
 // delete auth by id
 router.delete('/:credId', sessionCheck, async (req, res) => {
     try {
+        const { lang } = req.query;
         const { credId } = req.params;
         if (!credId) {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'credId is required',
+                message: lang === 'en' ? 'credId is required' : 'credId 不存在',
             })
         }
 
@@ -49,7 +50,7 @@ router.delete('/:credId', sessionCheck, async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'auth not exist.',
+                message: lang === 'en' ? 'auth not exist.' : '未找到关联的鉴权数据',
             });
         }
 
@@ -65,6 +66,7 @@ router.delete('/:credId', sessionCheck, async (req, res) => {
 router.post('/registerRequest', sessionCheck, async (req, res) => {
     try {
         const RP_NAME = 'Web Authn Completed App';
+        const { lang } = req.query;
         const { username, isAndroid } = req.body;
         const usernameRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/);
 
@@ -72,7 +74,7 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'username is invalid',
+                message: lang === 'en' ? 'username is invalid' : '用户名格式有误',
             })
         }
 
@@ -81,7 +83,7 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'user not exist',
+                message: lang === 'en' ? 'user not exist' : '用户不存在',
             })
         }
 
@@ -128,7 +130,7 @@ router.post('/registerRequest', sessionCheck, async (req, res) => {
 // register auth response
 router.post('/registerResponse', sessionCheck, async (req, res) => {
     try {
-        const { username } = req.query;
+        const { lang, username } = req.query;
         const { body } = req;
         const expectedChallenge = req.session.challenge;
         const expectedOrigin = process.env.ORIGIN;
@@ -138,7 +140,7 @@ router.post('/registerResponse', sessionCheck, async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'username, body, expectedChallenge, expectedOrigin, expectedRPID are required.'
+                message: lang === 'en' ? 'username, body, expectedChallenge, expectedOrigin, expectedRPID are required.' : '必选参数不能为空'
             });
         }
 
@@ -154,7 +156,7 @@ router.post('/registerResponse', sessionCheck, async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'User verification failed.'
+                message: lang === 'en' ? 'User verification failed.' : '用户验证失败'
             });
         }
 
@@ -181,7 +183,7 @@ router.post('/registerResponse', sessionCheck, async (req, res) => {
 // sign in with auth request
 router.post('/signinRequest', async (req, res) => {
     try {
-        const { username, credId, isAndroid } = req.query;
+        const { lang, username, credId, isAndroid } = req.query;
         let allowCredentials = [];
         const fido2Options = {};
 
@@ -191,7 +193,7 @@ router.post('/signinRequest', async (req, res) => {
                 return res.status(400).send({
                     code: 400,
                     data: {},
-                    message: 'username is invalid',
+                    message: lang === 'en' ? 'username is invalid' : '用户名格式有误',
                 })
             }
 
@@ -200,7 +202,7 @@ router.post('/signinRequest', async (req, res) => {
                 return res.status(400).send({
                     code: 400,
                     data: {},
-                    message: 'user not exist',
+                    message: lang === 'en' ? 'user not exist' : '用户不存在',
                 })
             }
 
@@ -241,6 +243,7 @@ router.post('/signinRequest', async (req, res) => {
 // sign in with auth response
 router.post('/signinResponse', async (req, res) => {
     try {
+        const { lang } = req.query;
         const { body } = req;
         const expectedChallenge = req.session.challenge;
         const expectedOrigin = process.env.ORIGIN;
@@ -250,7 +253,7 @@ router.post('/signinResponse', async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'body, expectedChallenge, expectedOrigin, expectedRPID are required.'
+                message: lang === 'en' ? 'body, expectedChallenge, expectedOrigin, expectedRPID are required.' : '必选字段不能为空'
             });
         }
 
@@ -261,7 +264,7 @@ router.post('/signinResponse', async (req, res) => {
         credential.counter = credential.prevCounter;
 
         if (!credential) {
-            throw 'Authenticating credential not found.';
+            throw lang === 'en' ? 'Authenticating credential not found.' : '未找到验证签名';
         }
 
         const verification = await fido2.verifyAuthenticationResponse({
@@ -278,7 +281,7 @@ router.post('/signinResponse', async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'User verification failed.',
+                message: lang === 'en' ? 'User verification failed.' : '用户验证失败',
             });
         }
 

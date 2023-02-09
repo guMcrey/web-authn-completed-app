@@ -1,12 +1,7 @@
 <template>
   <div class="device-type-select">
-    <div class="device-type-title">Device type</div>
-    <el-select
-      v-model="deviceType"
-      placeholder="Select Device Type"
-      size="large"
-      style="flex: 1;"
-    >
+    <div class="device-type-title">{{ t('nav.deviceType') }}</div>
+    <el-select v-model="deviceType" size="large" style="flex: 1;">
       <el-option
         v-for="item in deviceOptions"
         :key="item.value"
@@ -38,7 +33,9 @@
 
 <script lang="ts" setup>
 import {ref} from 'vue'
+import {useI18n} from 'vue-i18n'
 
+const {t} = useI18n()
 const deviceType = ref('win10')
 const deviceOptions = [
   {value: 'win10', label: 'Windows 10', browser: 'Edge 108.0.1462.76'},

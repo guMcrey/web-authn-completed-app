@@ -1,5 +1,5 @@
 <template>
-  <Nav />
+  <Nav :showUserGuide="showUserGuide" @closeUserGuide="showUserGuide = false" />
   <div class="page-container-wrapper">
     <div class="page-container">
       <div class="container-header">
@@ -8,8 +8,16 @@
           alt="fido-passkey-image"
         />
       </div>
+      <div class="guide-tips">
+        {{ t('login.howToUse') }}
+        <span class="learn-more" @click="showUserGuide = true">{{
+          t('login.learnMore')
+        }}</span>
+      </div>
       <div class="container-content">
-        <div class="content-title">Sign in</div>
+        <div :class="locale === 'en' ? 'content-title' : 'content-title-zh'">
+          {{ t('login.signIn') }}
+        </div>
         <div class="content-detail">
           <SignInWithPasskey
             :username="username || usernameInput"
@@ -22,13 +30,12 @@
             @authSuccess="authSuccessCallback"
           />
           <InfoTip v-if="!isAuthenticatorAvailable" />
-          <div class="or-title">or</div>
+          <div class="or-title">{{ t('login.or') }}</div>
           <LoginForm />
         </div>
       </div>
       <div class="tips-text">
-        If the username does not exist, it will automatically register the user
-        for you.
+        {{ t('login.tips') }}
       </div>
     </div>
   </div>
@@ -42,6 +49,9 @@ import {ElMessageBox, ElMessage} from 'element-plus'
 import 'element-plus/es/components/message-box/style/css'
 import {useGetAuthByUsername} from '@/apis/useAuth'
 import {clientType} from '@/lib/functions'
+import {useI18n} from 'vue-i18n'
+
+const {t, locale} = useI18n()
 
 const {
   data: authList,
@@ -49,6 +59,7 @@ const {
   fetchData: fetchAuthByUsername,
 } = useGetAuthByUsername()
 
+const showUserGuide = ref(false)
 const isAuthenticatorAvailable = ref(false)
 const clickType = ref('')
 const usernameInput = ref('')
@@ -81,29 +92,26 @@ const clickSignInWithPasskeyHandler = async () => {
 const useAndroidClickSignInWithPasskeyHandler = async () => {
   if (username.value && !credId.value) {
     ElMessageBox.alert(
-      '<p><strong>Please log in with username and password, then add the webAuthn device again.</strong></p><p>( Passkey is unavailable because data may not exist due to clearing cache )</p>',
-      'Passkey is not available',
+      `<p><strong>${t(
+        'message.passkeyNotAvailableSubtitle'
+      )}</strong></p><p>${t('message.passkeyNotAvailableNoCatch')}</p>`,
+      t('message.passkeyNotAvailableTitle'),
       {
         type: 'info',
-        confirmButtonText: 'OK',
+        confirmButtonText: t('message.confirmData'),
         dangerouslyUseHTMLString: true,
       }
     )
     return
   }
   if (!username.value) {
-    ElMessageBox.prompt(
-      'Please enter the username of the WebAuthn device that has been added. If not, please log in with the username and password first.',
-      'Username',
-      {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        inputPlaceholder: 'Enter your username',
-        inputPattern: /^[a-zA-Z][a-zA-Z0-9_]{3,7}$/,
-        inputErrorMessage:
-          'Please enter 4-8 characters starting with a letter and consisting of letters, numbers and underscores.',
-      }
-    )
+    ElMessageBox.prompt(t('login.usernamePrompt'), t('login.username'), {
+      confirmButtonText: t('message.confirmBtn'),
+      cancelButtonText: t('message.cancelBtn'),
+      inputPlaceholder: t('login.usernamePlaceholder'),
+      inputPattern: /^[a-zA-Z][a-zA-Z0-9_]{3,7}$/,
+      inputErrorMessage: t('login.usernameValidate'),
+    })
       .then(async ({value}) => {
         await findAuthAndSignIn(value)
         usernameInput.value = value
@@ -120,21 +128,17 @@ const useAndroidClickSignInWithPasskeyHandler = async () => {
 const findAuthAndSignIn = async (username: string) => {
   await fetchAuthByUsername(username)
   if (!authList.value.length) {
-    ElMessageBox.alert(
-      "You don't have a passkey yet. Please log in with the username and password first, and then try again after add the WebAuthn device.",
-      'No passkey',
-      {
-        type: 'info',
-        confirmButtonText: 'OK',
-      }
-    )
+    ElMessageBox.alert(t('login.noPassKeyDescription'), t('login.noPasskey'), {
+      type: 'info',
+      confirmButtonText: t('message.confirmData'),
+    })
     return
   }
   clickType.value = 'login'
 }
 
 const authSuccessCallback = () => {
-  ElMessage.success('Login successful.')
+  ElMessage.success(t('message.loginSuccess'))
 }
 
 onMounted(() => {
@@ -162,6 +166,15 @@ onMounted(() => {
     max-width 100%
     max-height 100%
     border-radius 100%
+.guide-tips
+  font-size 14px
+  margin-top 12px
+  text-align center
+  color #969696
+.learn-more
+  color #409eff
+  font-weight 500
+  cursor pointer
 .container-content
   flex 100%
   margin-top 40px
@@ -169,6 +182,10 @@ onMounted(() => {
 .content-title
   font-size 26px
   font-weight bold
+.content-title-zh
+  font-size 24px
+  font-weight 500
+  color #2c2c2c
 .content-detail
   margin 20px 0
   display flex

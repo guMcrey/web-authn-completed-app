@@ -1,18 +1,20 @@
 <template>
   <div class="info-tip-container">
     <el-icon><InfoFilled /></el-icon>
-    {{ content }}
+    {{ content || t('home.noSupport') }}
   </div>
 </template>
 
 <script lang="ts" setup>
 import {InfoFilled} from '@element-plus/icons-vue'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 defineProps({
   content: {
     type: String,
-    default:
-      'This device or browser does not support User Verifying Platform Authenticator.',
+    default: '',
   },
 })
 </script>

@@ -1,8 +1,14 @@
 <template>
   <div class="passkey-list">
     <div class="passkey-list-header">
-      <div class="passkey-list-header-title">
-        The following devices are configured for your account
+      <div
+        :class="
+          locale === 'en'
+            ? 'passkey-list-header-title'
+            : 'passkey-list-header-title-zh'
+        "
+      >
+        {{ t('home.deviceTitle') }}
       </div>
       <div v-show="authList.length" class="passkey-list-header-count">
         {{ authList.length }}
@@ -20,20 +26,20 @@
       <template #icon>
         <img class="identify-icon" src="@/assets/images/identify-icon.svg" />
       </template>
-      Add WebAuthn Device
+      {{ t('home.addDeviceBtn') }}
     </el-button>
     <template v-if="authList.length">
       <div v-for="item in authList" class="passkey-item">
         <div class="item-detail">
           <div class="item-public-key-device">
-            <el-icon><Monitor /></el-icon> 
+            <el-icon><Monitor /></el-icon>
             <span class="detail-text">
               {{ item.deviceName || '-' }}
             </span>
           </div>
           <div class="item-public-key-id">
             <el-icon><Key /></el-icon>
-            <span class="detail-text">{{ item.publicKey || '-' }}</span> 
+            <span class="detail-text">{{ item.publicKey || '-' }}</span>
           </div>
           <div class="item-public-key-create-time">
             <el-icon><Timer /></el-icon>
@@ -54,7 +60,7 @@
     <el-empty
       v-if="!authList.length"
       :image-size="100"
-      description="No devices are configured."
+      :description="t('home.noData')"
     ></el-empty>
   </div>
 </template>
@@ -71,6 +77,9 @@ import {
   useDeleteAuth,
 } from '@/apis/useAuth'
 import {formatDate} from '@/lib/functions'
+import {useI18n} from 'vue-i18n'
+
+const {t, locale} = useI18n()
 
 const {
   data: registerRequestData,
@@ -110,15 +119,11 @@ const addAuthHandler = async () => {
 }
 
 const deleteAuthHandler = (credId: string) => {
-  ElMessageBox.confirm(
-    'Deleting the public key from the server. After deletion, you will not be able to use this passkey to log in. Do you want to continue?',
-    'Tips',
-    {
-      confirmButtonText: 'Confirm',
-      cancelButtonText: 'Cancel',
-      type: 'warning',
-    }
-  ).then(async () => {
+  ElMessageBox.confirm(t('message.deleteDescription'), t('message.tips'), {
+    confirmButtonText: t('message.confirmBtn'),
+    cancelButtonText: t('message.cancelBtn'),
+    type: 'warning',
+  }).then(async () => {
     await deleteAuthByIdHandler(credId)
     emits('change')
   })
@@ -153,6 +158,11 @@ const resetHandler = () => {
   font-size 17px
   font-weight 600
   line-height 24px
+.passkey-list-header-title-zh
+  font-size 15px
+  font-weight 600
+  line-height 24px
+  color #555
 .passkey-list-header-count
   font-size 15px
   font-weight 600
