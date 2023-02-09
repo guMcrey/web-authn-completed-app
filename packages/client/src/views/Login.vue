@@ -83,29 +83,26 @@ const clickSignInWithPasskeyHandler = async () => {
 const useAndroidClickSignInWithPasskeyHandler = async () => {
   if (username.value && !credId.value) {
     ElMessageBox.alert(
-      '<p><strong>Please log in with username and password, then add the webAuthn device again.</strong></p><p>( Passkey is unavailable because data may not exist due to clearing cache )</p>',
-      'Passkey is not available',
+      `<p><strong>${t(
+        'message.passkeyNotAvailableSubtitle'
+      )}</strong></p><p>${t('message.passkeyNotAvailableNoCatch')}</p>`,
+      t('message.passkeyNotAvailableTitle'),
       {
         type: 'info',
-        confirmButtonText: 'OK',
+        confirmButtonText: t('message.confirmData'),
         dangerouslyUseHTMLString: true,
       }
     )
     return
   }
   if (!username.value) {
-    ElMessageBox.prompt(
-      'Please enter the username of the WebAuthn device that has been added. If not, please log in with the username and password first.',
-      'Username',
-      {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        inputPlaceholder: 'Enter your username',
-        inputPattern: /^[a-zA-Z][a-zA-Z0-9_]{3,7}$/,
-        inputErrorMessage:
-          'Please enter 4-8 characters starting with a letter and consisting of letters, numbers and underscores.',
-      }
-    )
+    ElMessageBox.prompt(t('login.usernamePrompt'), t('login.username'), {
+      confirmButtonText: t('message.confirmBtn'),
+      cancelButtonText: t('message.cancelBtn'),
+      inputPlaceholder: t('login.usernamePlaceholder'),
+      inputPattern: /^[a-zA-Z][a-zA-Z0-9_]{3,7}$/,
+      inputErrorMessage: t('login.usernameValidate'),
+    })
       .then(async ({value}) => {
         await findAuthAndSignIn(value)
         usernameInput.value = value
@@ -122,21 +119,17 @@ const useAndroidClickSignInWithPasskeyHandler = async () => {
 const findAuthAndSignIn = async (username: string) => {
   await fetchAuthByUsername(username)
   if (!authList.value.length) {
-    ElMessageBox.alert(
-      "You don't have a passkey yet. Please log in with the username and password first, and then try again after add the WebAuthn device.",
-      'No passkey',
-      {
-        type: 'info',
-        confirmButtonText: 'OK',
-      }
-    )
+    ElMessageBox.alert(t('login.noPassKeyDescription'), t('login.noPasskey'), {
+      type: 'info',
+      confirmButtonText: t('message.confirmData'),
+    })
     return
   }
   clickType.value = 'login'
 }
 
 const authSuccessCallback = () => {
-  ElMessage.success('Login successful.')
+  ElMessage.success(t('message.loginSuccess'))
 }
 
 onMounted(() => {

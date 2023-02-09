@@ -31,12 +31,18 @@ export default {
     passwordValidate: '请输入 6-10 位以字母开头, 由字母、数字、下划线组成',
     tips:
       'Please enter 6-10 characters starting with a letter and consisting of letters, numbers and underscores',
+    usernamePrompt:
+      'Please enter the username of the WebAuthn device that has been added. If not, please log in with the username and password first.',
+    noPasskey: 'No passkey',
+    noPassKeyDescription:
+      "You don't have a passkey yet. Please log in with the username and password first, and then try again after add the WebAuthn device.",
   },
   home: {
     hello: 'Hello',
     cardTitle: 'Passwordless Authentication',
-    cardSubtitle:
-      'Follow the <strong>FIDO2</strong> standard to set up your account for passwordless authentication.',
+    cardSubtitle: 'Follow the',
+    cardSubtitle2:
+      'standard to set up your account for passwordless authentication.',
     deviceTitle: 'The following devices are configured for your account',
     addDeviceBtn: 'Add WebAuthn Device',
     noData: 'No devices are configured',
@@ -44,5 +50,24 @@ export default {
     noSupport:
       'This device or browser does not support User Verifying Platform Authenticator',
     noAdd: ", You can't add a WebAuthn device.",
+  },
+  message: {
+    loginSuccess: 'Login successful',
+    deleteSuccess: 'Delete completed',
+    passkeyNotAvailableTitle: 'Passkey is not available',
+    passkeyNotAvailableSubtitle:
+      'Please log in with username and password, then add the webAuthn device again.',
+    passkeyNotAvailableNoCatch:
+      '( Passkey is unavailable because data may not exist due to clearing cache )',
+    noPublicKey: 'No valid public key was matched',
+    noPublicKeyDescription:
+      'The public key associated with the user was not found. Unable to authenticate login now. Please log in with another method and register the passkey and try again.',
+    confirmData: 'OK',
+    logoutConfirm: 'Confirm to logout?',
+    tips: 'Tips',
+    confirmBtn: 'Confirm',
+    cancelBtn: 'Cancel',
+    deleteDescription:
+      'Deleting the public key from the server. After deletion, you will not be able to use this passkey to log in. Do you want to continue?',
   },
 }

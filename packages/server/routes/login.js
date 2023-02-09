@@ -12,17 +12,19 @@ const errorObj = {
 // check user login status
 router.get('/is-login', async (req, res) => {
     try {
+        const { lang } = req.query;
+
         if (req.session['signed-in'] !== 'yes') {
             return res.status(200).send({
                 code: 401,
                 data: {},
-                message: 'not signed in.'
+                message: lang === 'en' ? 'not signed in.' : '未登录'
             });
         }
         return res.status(200).send({
             code: 200,
             data: {},
-            message: 'login success.'
+            message: lang === 'en' ? 'login success.' : '登录成功'
         });
     } catch (err) {
         Object.assign(errorObj, { message: err });
@@ -32,6 +34,7 @@ router.get('/is-login', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
+        const { lang } = req.query;
         const { username, password } = req.body;
         const usernameRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{3,7}$/);
         const passwordRegex = new RegExp(/^[a-zA-Z][a-zA-Z0-9_]{5,9}$/);
@@ -39,7 +42,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).send({
                 code: 400,
                 data: {},
-                message: 'username and password is invalid.'
+                message: lang === 'en' ? 'username or password is invalid.' : '用户名或密码格式有误'
             })
         }
 
@@ -53,7 +56,7 @@ router.post('/login', async (req, res) => {
                 return res.status(400).send({
                     code: 400,
                     data: {},
-                    message: 'username or password is wrong.'
+                    message: lang === 'en' ? 'username or password is wrong.' : '用户名或密码不正确'
                 })
             }
         }
@@ -72,8 +75,10 @@ router.post('/login', async (req, res) => {
 
 router.get('/logout', sessionCheck, async (req, res) => {
     try {
+        const { lang } = req.query
+
         req.session.destroy();
-        res.status(200).send('logout success');
+        res.status(200).send(lang === 'en' ? 'logout success' : '登出成功');
     } catch (err) {
         Object.assign(errorObj, { message: err });
         res.status(500).send(errorObj)

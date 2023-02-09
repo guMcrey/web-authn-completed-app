@@ -147,6 +147,7 @@ const handleCommand = (language: string) => {
   padding-right 40px
   display flex
   align-items center
+  cursor pointer
   img
     max-width 100%
     max-height 100%
@@ -168,6 +169,8 @@ const handleCommand = (language: string) => {
 .el-dropdown-wrap
   display flex
   align-items center
+:deep(.el-dropdown)
+  vertical-align inherit
 @media screen and (max-width 1024px)
   .nav-wrapper
     padding 15px 27px

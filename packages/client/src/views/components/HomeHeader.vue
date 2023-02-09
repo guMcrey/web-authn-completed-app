@@ -6,7 +6,11 @@
     </div>
     <el-card class="passkey-card">
       <div class="card-title">{{ t('home.cardTitle') }}</div>
-      <div class="card-subtitle" v-html="t('home.cardSubtitle')"></div>
+      <div class="card-subtitle">
+        {{ t('home.cardSubtitle') }}
+        <strong>FIDO2</strong>
+        {{ t('home.cardSubtitle2') }}
+      </div>
       <img class="card-icon" src="@/assets/images/focus.jpg" alt="focus" />
     </el-card>
   </div>

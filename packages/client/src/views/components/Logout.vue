@@ -22,9 +22,9 @@ const {t} = useI18n()
 const {loading, logoutHandler} = useLogout()
 
 const clickLogoutHandler = () => {
-  ElMessageBox.confirm('Confirm to logout?', 'Tips', {
-    confirmButtonText: 'Confirm',
-    cancelButtonText: 'Cancel',
+  ElMessageBox.confirm(t('message.logoutConfirm'), t('message.tips'), {
+    confirmButtonText: t('message.confirmBtn'),
+    cancelButtonText: t('message.cancelBtn'),
     type: 'warning',
   }).then(async () => {
     await logoutHandler()

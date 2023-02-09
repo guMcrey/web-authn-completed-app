@@ -113,15 +113,11 @@ const addAuthHandler = async () => {
 }
 
 const deleteAuthHandler = (credId: string) => {
-  ElMessageBox.confirm(
-    'Deleting the public key from the server. After deletion, you will not be able to use this passkey to log in. Do you want to continue?',
-    'Tips',
-    {
-      confirmButtonText: 'Confirm',
-      cancelButtonText: 'Cancel',
-      type: 'warning',
-    }
-  ).then(async () => {
+  ElMessageBox.confirm(t('message.deleteDescription'), t('message.tips'), {
+    confirmButtonText: t('message.confirmBtn'),
+    cancelButtonText: t('message.cancelBtn'),
+    type: 'warning',
+  }).then(async () => {
     await deleteAuthByIdHandler(credId)
     emits('change')
   })
