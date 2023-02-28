@@ -25,7 +25,7 @@ import ProductIntroduction from './components/ProductIntroduction.vue'
     right 0
     width 60%
     height 100vh
-    background-image url('@/assets/images/product-bg.svg')
+    background-image url('@/assets/images/product-bg.webp')
     background-position top right
     background-size contain
     background-repeat no-repeat

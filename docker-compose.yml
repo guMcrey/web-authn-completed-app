@@ -5,10 +5,12 @@ services:
     build: ./packages/client
     ports:
       - 5173:80
+    restart: always
   server:
     build: ./packages/server
     ports:
       - 3001:3001
+    restart: always
   mysql:
     image: mysql:8.0
     ports:
@@ -18,3 +20,4 @@ services:
     environment: 
       MYSQL_ROOT_PASSWORD: Password123#@!
       MYSQL_DATABASE: web_authn_demo
+    restart: always
