@@ -14,7 +14,7 @@ This monorepo project contains code of client and server
 
 ## Overview
 
-💻 overview online demo: [web-authn.x-dev.club](https://web-authn.x-dev.club)
+💻 overview online demo: [web-authn.x-dev-6.club](https://web-authn.x-dev-6.club)
 
 What you'll need
 - One of the following devices:
