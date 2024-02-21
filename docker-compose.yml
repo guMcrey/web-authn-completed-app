@@ -1,4 +1,4 @@
-version: "2.12"
+version: "2.2"
 
 services:
   client:
@@ -12,8 +12,8 @@ services:
         max-size: 1m
   server:
     build: ./packages/server
-    ports:
-      - 3001:3001
+    # ports:
+    #  - 3001:3001
     restart: unless-stopped
     logging:
       driver: json-file
@@ -21,8 +21,8 @@ services:
         max-size: 1m
   mysql:
     image: mysql:8.0
-    ports:
-      - 3306:3306
+    # ports:
+    #  - 3306:3306
     volumes:
       - ./database:/var/lib/mysql
     environment: 
