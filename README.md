@@ -14,7 +14,7 @@ This monorepo project contains code of client and server
 
 ## Overview
 
-💻 overview online demo: [web-authn.x-dev-6.club](https://web-authn.x-dev-6.club)
+💻 overview online demo: [web-authn.starjump.space](https://web-authn.starjump.space)
 
 What you'll need
 - One of the following devices:
@@ -34,7 +34,7 @@ What you'll need
   <img width="400" src="./preview/MobileSafari14-IOS14.gif" />
 </p>
 
-*All user data registered through web-authn.x-dev.club will not be used and is only for demo user statistics. If you are still concerned, you can email itgumx@163.com to delete the data.*
+*All user data registered through web-authn.starjump.space will not be used and is only for demo user statistics. If you are still concerned, you can email itgumx@163.com to delete the data.*
 
 ## Install
 
