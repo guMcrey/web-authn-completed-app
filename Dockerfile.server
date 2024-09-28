@@ -1,0 +1,17 @@
+FROM node:16
+
+# Create app directory
+WORKDIR /app
+
+RUN npm install -g pnpm@7
+
+COPY package*.json pnpm*.yaml ./
+COPY packages/server/package*.json ./packages/server/
+
+RUN pnpm i --frozen-lockfile
+
+COPY ./ ./
+
+EXPOSE 3001
+
+CMD ["npm", "run", "start:server"]

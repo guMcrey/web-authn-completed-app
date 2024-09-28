@@ -2,7 +2,12 @@ version: "2.2"
 
 services:
   client:
-    build: ./packages/client
+    build:
+      context: .
+      dockerfile: ./Dockerfile.client
+      args:
+        - http_proxy=http://192.168.31.74:1080
+        - https_proxy=http://192.168.31.74:1080
     ports:
       - 5173:80
     restart: unless-stopped
@@ -11,7 +16,12 @@ services:
       options:
         max-size: 1m
   server:
-    build: ./packages/server
+    build:
+      context: .
+      dockerfile: ./Dockerfile.server
+      args:
+        - http_proxy=http://192.168.31.74:1080
+        - https_proxy=http://192.168.31.74:1080
     # ports:
     #  - 3001:3001
     restart: unless-stopped

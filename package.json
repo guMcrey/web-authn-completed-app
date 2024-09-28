@@ -3,6 +3,11 @@
   "version": "1.1.0",
   "description": "",
   "scripts": {
+    "start:server": "pnpm -C packages/server start",
+    "dev:server": "pnpm -C packages/server dev",
+    "build:client": "pnpm -C packages/client build",
+    "dev:client": "pnpm -C packages/client dev",
+    "prettier": "prettier --write ./**/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
