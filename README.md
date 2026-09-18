@@ -161,4 +161,4 @@ Browser access：http://localhost:5173
 
 ## License
 
-is an open source project, licensed at [MIT](./LICENSE)
+web-authn-completed-app is an open source project, licensed at [MIT](./LICENSE)
